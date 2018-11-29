@@ -7,7 +7,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prodDeploy": "npm run buildProd && npm run to-couch",
+    "buildProd": "ng build --base-href=. --prod --build-optimizer --output-hashing none",
+    "to-couch": "angular_couch_deployment.sh -d dist/Ang7LSM6 -b http://prot-subuntu:5985 -o Ang7LSM6 -a ang_prot-wiki"
   },
   "private": true,
   "dependencies": {
@@ -20,8 +23,12 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "@ng-select/ng-select": "^2.12.1",
     "core-js": "^2.5.4",
+    "file-saver": "^2.0.0",
+    "font-awesome": "^4.7.0",
     "rxjs": "~6.3.3",
+    "typicons.font": "^2.0.9",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -29,9 +36,10 @@
     "@angular/cli": "~7.0.6",
     "@angular/compiler-cli": "~7.0.0",
     "@angular/language-service": "~7.0.0",
-    "@types/node": "~8.9.4",
+    "@fortawesome/fontawesome-free": "^5.5.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",

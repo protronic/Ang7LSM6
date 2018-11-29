@@ -1,20 +1,138 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+ crossorigin="anonymous">
+<body>
+	<header>
+		<h1>Lichtszenen Modul | LSM 6</h1>
+		<div class="logout">
+			<label *ngIf="wsConected; else loginLabel" title="Logout"><i class="fa fa-sign-out" aria-hidden="true" (click)="disconnect()"></i></label>
+			<ng-template #loginLabel> <label title="Login"><i class="fa fa-sign-in" aria-hidden="true" (click)="connect()"></i></label></ng-template>
+		</div>
+		<div class="temperature">
+			<i class="fa fa-history"></i> {{msg?.tic / 3600000 | number:'1.1-1'}}
+			h <span class="typcn typcn-thermometer status"></span>
+			{{msg?.tmp}}°C
+		</div>
+	</header>
+	<div class="tab">
+		<button class="tablinks" [ngClass]="{active: tab==-1}" type="button" [disabled]="!wsConected" (click)="tab=-1;showDetails=false">
+			<br /> <span class="fa fa-sliders" aria-hidden="true"></span>
+		</button>
+		<button *ngFor="let text of tabTexts; let i = index" class="tablinks" [ngClass]="{active: tab==i}" type="button"
+		 [disabled]="!msg?.sw[i]" (click)="tab=i">
+			{{text}} <br /> <span class="fa fa-tasks" aria-hidden="true"></span>
+		</button>
+	</div>
 
+
+	<main id="content">
+		<div *ngIf="tab>=0; else directSlider">
+			<ul class="slidercontainer" id="lightSceneSliderContainer" style="position: relative;">
+				<li>
+					<table class="slider">
+						<tr>
+							<td class="col1 edit-prog-icon"><span class="typcn typcn-cog" (click)="showDetails = !showDetails"></span></td>
+							<td class="col2">Lichtszene {{tab + 1}}
+								{{getOverrunTimestemp()}}</td>
+							<td class="col3"><input type="checkbox" [id]="'lsm'+tab" [disabled]="!wsConected" (change)="j['btn_' + (tab + 1)] = msg?.btn[tab] ? '1' : '0';sendObjToLSM6()"
+								 [(ngModel)]="msg?.btn[tab]" /><label [for]="'lsm'+tab"></label></td>
+						</tr>
+					</table>
+				</li>
+
+				<li id="block-lightScene1" class="no-block-Scene"></li>
+				<li style="padding: 0px;">
+					<table class="slider">
+						<tr id="edit-prog1" *ngIf="showDetails">
+							<td class="edit-prog" colspan="3">
+								<table class="edit-prog">
+									<tr *ngIf="true">
+										<td></td>
+										<td><label><span class="typcn typcn-weather-sunny" aria-hidden="true"></span> Sensor</label></td>
+										<td>{{msg?.sens.ls[tab]}} Lux</td>
+									</tr>
+									<tr *ngIf="msg?.sens.ls[tab] > -1">
+										<td style="text-align: right;">Tageslichtregelung<input type="checkbox" [id]="'sp'+tab" [ngModel]="msg?.lsm.sp[tab] > 0"
+											 (ngModelChange)="msg?.lsm.sp[tab] = $event ? 1 : 0" /> <label [for]="'sp'+tab"></label></td>
+										<td><label><i class="fa fa-bullseye" aria-hidden="true"></i> Sollwert</label></td>
+										<td><input type="number" id="sp" min="0" max="20000" value="" class="small-text-input" [(ngModel)]="msg?.lsm.sp[tab]" />
+											Lux</td>
+									</tr>
+									<tr *ngIf="msg?.sens.ls[tab] > -1">
+										<td style="text-align: right;">Bewegungsmelder<input type="checkbox" [id]="'mode'+tab" [ngModel]="msg?.sens.mo[tab]"
+											 (ngModelChange)="ifModeNull($event)" /> <label [for]="'mode'+tab"></label></td>
+										<td><label><i class="fa fa-adjust" aria-hidden="true"></i> Schwellwert</label></td>
+										<td><input type="number" id="lt" min="0" max="20000" value="" class="small-text-input" [(ngModel)]="msg?.sens.lt[tab]" />
+											Lux</td>
+									</tr>
+									<tr>
+										<td style="text-align: right;">Treppenlichtfunktion <input type="checkbox" [id]="'ot'+tab" [ngModel]="msg?.sens.ot[tab] > 0"
+											 (ngModelChange)="this.msg?.sens.ot[tab] = $event ? 60000 : 0" />
+											<label [for]="'ot'+tab"></label></td>
+										<td><label><span class="typcn typcn-stopwatch"></span>
+												Nachlaufzeit</label></td>
+										<td><input type="number" id="ot" min="0" max="60000" value="" class="small-text-input" [ngModel]="msg?.sens.ot[tab] / 60000"
+											 (ngModelChange)="this.msg?.sens.ot[tab] = ($event * 60000)" />
+											Min.</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</li>
+
+				<li *ngFor="let text of tabTexts; let i = index" class="slider-row">
+					<app-dimm-slider [channel]="i" [(dimmValue)]="msg?.lsm.sl[this.tab][i]"></app-dimm-slider>
+				</li>
+			</ul>
+		</div>
+
+		<ng-template #directSlider>
+			<ul class="slidercontainer" id="lightSceneSliderContainer" style="position: relative;">
+				<li>
+					<table class="slider">
+						<tr>
+							<td class="col2">Licht dimmen</td>
+						</tr>
+					</table>
+				</li>
+
+				<li *ngFor="let text of tabTexts; let i = index" class="slider-row">
+					<app-dimm-slider [channel]="i" [sceneSlider]="false" [disabled]="msg?.sw[i]" [(dimmValue)]="msg?.lsm.dali[i]"
+					 (change)="j['dali_' + (i + 1)] = msg?.lsm.dali[i];sendObjToLSM6()"></app-dimm-slider>
+				</li>
+			</ul>
+		</ng-template>
+
+		<ul class="button-container" *ngIf="showConnectionData">
+			<li><label class="button1"><i class="fa fa-link" aria-hidden="true"></i> IP-Adresse: </label></li>
+			<li>
+				<ng-select class="button" [items]="ipItems" [addTag]="true" bindValue="label" [(ngModel)]="wsUrl"> </ng-select>
+			</li>
+			<li><label class="button" title="Login" (click)="connect()">
+					<!-- <i class="fa fa-sign-in" aria-hidden="true"></i> {{wsState}} -->
+					{{wsState}}
+				</label></li>
+		</ul>
+
+		<ul class="button-container">
+			<li><label class="button"><span class="typcn typcn-upload"></span> Hochladen <input type="file" name="file" accept="application/json"
+					 (change)="uploadJsonFile($event)" style="display: none"> </label></li>
+			<li><label class="button" (click)="downloadJsonFile()" id="backup"><span class="typcn typcn-download"></span>
+					Herunterladen</label></li>
+			<li><label *ngIf="wsConected; else connectLabel" class="button" (click)="j=msg;sendObjToLSM6()"><i class="fa fa-floppy-o"
+					 aria-hidden="true"></i> Speichern</label>
+				<ng-template #connectLabel>
+					<label class="button" (click)="showConnectionData=!showConnectionData"><i class="fa fa-sign-in" aria-hidden="true"></i>
+						Verbindung</label></ng-template>
+			</li>
+		</ul>
+	</main>
+
+	<footer>
+		<ul class="button-container">
+			<li><a href="http://www.protronic-gmbh.de" target="_blank" class="logolink"><img src="img/logo_neg.png" class="logo" /></a></li>
+			<li><a href="http://www.protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf" target="_blank" class="downloadlink"><i
+					 class="fa fa-file-pdf-o" aria-hidden="true"></i>Anleitung (DE)</a></li>
+		</ul>
+	</footer>
+</body>
