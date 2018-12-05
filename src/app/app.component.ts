@@ -61,6 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
   j = {};
   senonsorOptions = [1, 2, 3, 4, 5, 6];
   sensorSelection = 0;
+  offSetvalue = 0;
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -75,6 +76,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   changeTab(i: number) {
     this.tab = i;
+    this.offSetvalue = this.msg.lsm.of[this.tab];
   }
   ngOnDestroy() {
     this.lsm6Subscription.unsubscribe();
@@ -84,6 +86,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.sensorSelection) {
       console.log(this.sensorSelection);
     }
+    this.msg.lsm.si[this.tab] = this.sensorSelection;
   }
   connect() {
 
@@ -92,19 +95,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
         mergeObjects(this.msg, JSON.parse(message.data));
-        console.log(this.msg);
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
         this.wsConected = true;
       }, error => {
-        console.log('LSM6 websocket Closed: ' + this.lsm6Service.url);
         this.wsUrl = 'lsm6';
         this.lsm6Subscription.unsubscribe();
         this.wsConected = false;
       }, () => {
         this.lsm6Subscription.unsubscribe();
         this.wsState = 'Verbindung wiederherstellen?';
-        console.log('LSM6 websocket Error: ' + this.lsm6Service.url);
         this.wsConected = false;
       });
 
@@ -144,7 +144,10 @@ export class AppComponent implements OnInit, OnDestroy {
     const file = new Blob([jsonString], { type: 'text/json;charset=utf-8' });
     saveAs(file, 'config.json');
   }
-
+  setOffset(event) {
+    this.msg.lsm.of[this.tab] = (event * 2.56);
+    console.log(this.msg.lsm.of);
+  }
   uploadJsonFile(e) {
     const file: File = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
 
