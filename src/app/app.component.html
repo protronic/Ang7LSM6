@@ -84,13 +84,26 @@
 											</ng-select>
 										</td>
 									</tr>
-									<tr>
+									<tr *ngIf="msg?.lsm.of">
 										<td style="text-align: center;">Offset</td>
-										<td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Offset</label></td>
+										<td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Verschiebung</label></td>
 										<td class="slider-width"><input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)"
-											 [disabled]="'false'"/></td>
+											 [disabled]="'false'" /></td>
 										<!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
-
+									</tr>
+									<tr *ngIf="msg?.lsm.Min">
+										<td style="text-align: center;">Min</td>
+										<td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Min</label></td>
+										<td class="slider-width"><input type="range" [(ngModel)]="minValue" (ngModelChange)="setMinValue($event)"
+											 [disabled]="'false'" /></td>
+										<!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
+									</tr>
+									<tr *ngIf="msg?.lsm.Min">
+										<td style="text-align: center;">Max</td>
+										<td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Max</label></td>
+										<td class="slider-width"><input type="range" [(ngModel)]="maxValue" (ngModelChange)="setMaxValue($event)"
+											 [disabled]="'false'" /></td>
+										<!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
 									</tr>
 								</table>
 							</td>

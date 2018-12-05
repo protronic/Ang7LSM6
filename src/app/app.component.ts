@@ -62,6 +62,8 @@ export class AppComponent implements OnInit, OnDestroy {
   senonsorOptions = [1, 2, 3, 4, 5, 6];
   sensorSelection = 0;
   offSetvalue = 0;
+  minValue = 0;
+  maxValue = 0;
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -200,7 +202,12 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     return 'schalten';
   }
-
+  setMinValue(event) {
+    this.msg.lsm.min[this.tab] = 2.53 * event;
+  }
+  setMaxValue(event) {
+    this.msg.lsm.max[this.tab] = 2.53 * event;
+  }
   //  refreshSelect(value: any): void {
   ////    this.wsUrl = value;
   //  }
