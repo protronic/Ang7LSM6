@@ -1,4 +1,4 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'jsonCompact'
@@ -6,10 +6,10 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 export class JsonCompactPipe implements PipeTransform {
 
-  // Note: This regex matches even invalid JSON strings, but since we’re
+  // Note: This regex matches even invalid JSON strings, but since weï¿½re
   // working on the output of `JSON.stringify` we know that only valid strings
   // are present (unless the user supplied a weird `options.indent` but in
-  // that case we don’t care since the output would be invalid anyway).
+  // that case we donï¿½t care since the output would be invalid anyway).
   stringOrChar = /("(?:[^\\"]|\\.)*")|[:,\][}{]/g;
   indent;
   addMargin;
@@ -17,11 +17,11 @@ export class JsonCompactPipe implements PipeTransform {
   nextIndent;
 
   transform(value: any, args?: any): any {
-    return this.stringify(value, {maxLength: 80});
+    return this.stringify(value, { maxLength: 80 });
   }
 
   prettify(str: string, addMargin): string {
-    const m = addMargin ? ' ' : ''
+    const m = addMargin ? ' ' : '';
     const tokens = {
       '{': '{' + m,
       '[': '[' + m,
@@ -29,65 +29,65 @@ export class JsonCompactPipe implements PipeTransform {
       ']': m + ']',
       ',': ', ',
       ':': ': '
-    }
-    return str.replace(this.stringOrChar, function(match, s) {
-      return s ? match : tokens[match]
-    })
+    };
+    return str.replace(this.stringOrChar, function (match, s) {
+      return s ? match : tokens[match];
+    });
   }
 
   comma(array, index) {
-    return (index === array.length - 1 ? 0 : 1)
+    return (index === array.length - 1 ? 0 : 1);
   }
 
   get(options, name, defaultValue) {
-    return (name in options ? options[name] : defaultValue)
+    return (name in options ? options[name] : defaultValue);
   }
 
   _stringify(o, currentIndent, reserved): string {
     if (o && typeof o.toJSON === 'function') {
-      o = o.toJSON()
+      o = o.toJSON();
     }
 
-    const s = JSON.stringify(o)
+    const s = JSON.stringify(o);
 
     if (s === undefined) {
-      return s
+      return s;
     }
 
-    const length = this.maxLength - currentIndent.length - reserved
+    const length = this.maxLength - currentIndent.length - reserved;
 
     if (s.length <= length) {
-      const prettified = this.prettify(s, this.addMargin)
+      const prettified = this.prettify(s, this.addMargin);
       if (prettified.length <= length) {
-        return prettified
+        return prettified;
       }
     }
 
     if (typeof o === 'object' && o !== null) {
-      const nextIndent = currentIndent + this.indent
-      const items = []
-      let delimiters
+      const nextIndent = currentIndent + this.indent;
+      const items = [];
+      let delimiters;
 
 
       if (Array.isArray(o)) {
         for (let index = 0; index < o.length; index++) {
           items.push(
             this._stringify(o[index], nextIndent, this.comma(o, index)) || 'null'
-          )
+          );
         }
-        delimiters = '[]'
+        delimiters = '[]';
       } else {
         const array = Object.keys(o);
         for (let index = 0; index < array.length; index++) {
           const key = array[index];
-          const keyPart = JSON.stringify(key) + ': '
-          const value = this._stringify(o[key], nextIndent, keyPart.length + this.comma(array, index))
+          const keyPart = JSON.stringify(key) + ': ';
+          const value = this._stringify(o[key], nextIndent, keyPart.length + this.comma(array, index));
           if (value !== undefined) {
-            items.push(keyPart + value)
+            items.push(keyPart + value);
           }
         }
 
-        delimiters = '{}'
+        delimiters = '{}';
       }
 
       if (items.length > 0) {
@@ -95,18 +95,18 @@ export class JsonCompactPipe implements PipeTransform {
           delimiters[0],
           this.indent + items.join(',\n' + nextIndent),
           delimiters[1]
-        ].join('\n' + currentIndent)
+        ].join('\n' + currentIndent);
       }
     }
-    return s
+    return s;
   }
 
   stringify(obj, options): string {
-    options = options || {}
-    this.indent = JSON.stringify([1], null, this.get(options, 'indent', 2)).slice(2, -3)
-    this.addMargin = this.get(options, 'margins', false)
-    this.maxLength = (this.indent === '' ? Infinity : this.get(options, 'maxLength', 80))
-    return (this._stringify(obj, '', 0))
+    options = options || {};
+    this.indent = JSON.stringify([1], null, this.get(options, 'indent', 2)).slice(2, -3);
+    this.addMargin = this.get(options, 'margins', false);
+    this.maxLength = (this.indent === '' ? Infinity : this.get(options, 'maxLength', 80));
+    return (this._stringify(obj, '', 0));
   }
 }
 
@@ -128,7 +128,7 @@ export const mergeObjects = <T extends object = object>(target: T, ...sources: T
   }
 
   if (isMergebleObject(target) && isMergebleObject(source)) {
-    Object.keys(source).forEach(function(key: string) {
+    Object.keys(source).forEach(function (key: string) {
       if (isMergebleObject(source[key])) {
         if (!target[key]) {
           target[key] = {};

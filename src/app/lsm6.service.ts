@@ -8,10 +8,14 @@ export interface Lsm6Data {
   sw?: boolean[];
   tmp?: number;
   tic?: number;
-  lsm: {
+  lsm?: {
     dali: number[],
     sp: number[],
     sl: number[][],
+    si: number[],
+    of: number[],
+    max: number[],
+    min: number[]
   };
   sens?: {
     ls: number[],

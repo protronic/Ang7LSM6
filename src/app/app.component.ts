@@ -15,7 +15,7 @@ const DEFAULT_CONF =
     "lsm": {"dali": [254, 254, 254, 254, 254, 254], "sp": [0, 0, 0, 0, 0, 0], \
         "sl": [[255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255],\
               [255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255], \
-              [255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255]]},\
+              [255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255]], "si": [1,2,3,4,5,6]},\
     "sens": {"ls": [0, 0, 0, 0, 0, 0], "lt": [0, 0, 0, 0, 0, 0], "ot": [0, 0, 0, 0, 0, 0],\
     "ts":[0, 0, 0, 0, 0, 0], "mo": [0, 0, 0, 0, 0, 0]}}';
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
@@ -59,7 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
   loaded = false;
   imageSrc;
   j = {};
-
+  senonsorOptions = [1, 2, 3, 4, 5, 6];
+  sensorSelection = 0;
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -69,22 +70,29 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.wsUrl = window.location.hostname;
     this.connect();
-  }
+    console.log(JSON.parse(DEFAULT_CONF));
 
+  }
+  changeTab(i: number) {
+    this.tab = i;
+  }
   ngOnDestroy() {
     this.lsm6Subscription.unsubscribe();
     this.stateSubscription.unsubscribe();
   }
-
+  setSensorChange() {
+    if (this.sensorSelection) {
+      console.log(this.sensorSelection);
+    }
+  }
   connect() {
 
 
     this.lsm6Service.connect(this.wsUrl);
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
-        console.log('sw: ' + this.msg.sw);
-        console.log('received message from server: ' + message.data);
         mergeObjects(this.msg, JSON.parse(message.data));
+        console.log(this.msg);
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
         this.wsConected = true;
@@ -107,7 +115,6 @@ export class AppComponent implements OnInit, OnDestroy {
         .subscribe(data => {
           if (!this.msg) {
             this.msg = data.json();
-            console.log(JSON.stringify(this.msg));
             this.loaded = true;
           }
         });
@@ -134,7 +141,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   downloadJsonFile() {
     const jsonString = JsonCompactPipe.prototype.transform(this.msg);
-    console.log(jsonString);
     const file = new Blob([jsonString], { type: 'text/json;charset=utf-8' });
     saveAs(file, 'config.json');
   }
@@ -175,7 +181,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ifModeNull(mode: boolean): void {
     this.msg.sens.mo[this.tab] = mode ? 1 : 0;
     if (!mode) {
-      this.msg.sens.lt[this.tab] = 0
+      this.msg.sens.lt[this.tab] = 0;
     }
   }
 

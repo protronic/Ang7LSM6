@@ -9,7 +9,9 @@ import { DimmPipe } from './gui/dimm-slider/dimm.pipe';
 import { DimmSliderComponent } from './gui/dimm-slider/dimm-slider.component';
 import { JsonCompactPipe } from './jsonlib/json-compact.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
     BrowserModule,
     FormsModule,
     HttpModule,
-    NgSelectModule
+    NgSelectModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    BrowserAnimationsModule
   ],
   providers: [Lsm6Service],
   bootstrap: [AppComponent]
