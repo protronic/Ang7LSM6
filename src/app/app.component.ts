@@ -60,21 +60,29 @@ export class AppComponent implements OnInit, OnDestroy {
   imageSrc;
   j = {};
   senonsorOptions = [1, 2, 3, 4, 5, 6];
-  sensorSelection = 0;
+  sensorSelection = 1;
   offSetvalue = 0;
   minValue = 0;
   maxValue = 0;
+  ready = true;
+  customSI = true;
+  customOf = true;
+  customMinValue = true;
+  customMaxValue = true;
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
     this.ipItems = IP_ITEMS;
   }
-
+  strData = '';
   ngOnInit() {
     this.wsUrl = window.location.hostname;
     this.connect();
     console.log(JSON.parse(DEFAULT_CONF));
 
+  }
+  changeMax() {
+    this.customMaxValue = !this.customMaxValue;
   }
   changeTab(i: number) {
     this.tab = i;
@@ -90,16 +98,31 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.msg.lsm.si[this.tab] = this.sensorSelection;
   }
+  changeMin() {
+    this.customMinValue = !this.customMinValue;
+  }
+  changeOffset() {
+    this.customOf = !this.customOf;
+  }
+  changeSI() {
+    this.customSI = !this.customSI;
+  }
+  update() {
+    console.log('called!2');
+  }
   connect() {
 
 
     this.lsm6Service.connect(this.wsUrl);
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
+        console.log(message.data);
         mergeObjects(this.msg, JSON.parse(message.data));
         this.wsState = 'Verbunden';
+
         this.showConnectionData = false;
         this.wsConected = true;
+
       }, error => {
         this.wsUrl = 'lsm6';
         this.lsm6Subscription.unsubscribe();
@@ -109,8 +132,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.wsState = 'Verbindung wiederherstellen?';
         this.wsConected = false;
       });
-
-
 
     try {
       this.http.get('assets/config.json')
@@ -136,9 +157,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   sendObjToLSM6() {
-    const s = JSON.stringify(this.j);
-    this.lsm6Service.send(s);
-    this.j = {};
+    if (this.ready) {
+      this.ready = false;
+      const s = JSON.stringify(this.j);
+      this.lsm6Service.send(s);
+      this.j = {};
+      this.ready = true;
+    } else {
+      console.log('deadlock');
+      console.log(this.ready);
+    }
+
   }
 
   downloadJsonFile() {

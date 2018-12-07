@@ -14,7 +14,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^7.0.4",
+    "@angular/animations": "^7.1.2",
     "@angular/cdk": "^7.1.1",
     "@angular/common": "~7.0.0",
     "@angular/compiler": "~7.0.0",
@@ -29,7 +29,9 @@
     "core-js": "^2.5.4",
     "file-saver": "^2.0.0",
     "font-awesome": "^4.7.0",
+    "queueing-subject": "^0.3.0",
     "rxjs": "~6.3.3",
+    "rxjs-websockets": "^6.0.3",
     "typicons.font": "^2.0.9",
     "zone.js": "~0.8.26"
   },
