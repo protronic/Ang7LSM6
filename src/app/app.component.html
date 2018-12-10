@@ -13,6 +13,7 @@
          <i class="fa fa-history"></i> {{msg?.tic / 3600000 | number:'1.1-1'}}
          h <span class="typcn typcn-thermometer status"></span>
          {{msg?.tmp}}°C
+         <i class="typcn typcn-spanner" aria-hidden="true"></i> Dil {{getDilBinary()}}
       </div>
    </header>
    <div class="tab">
@@ -88,12 +89,12 @@
                               <td>
                                  <div *ngIf="customSI;else elseBlock">
                                     <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
-                                    (change)="setSensorChange()" [disabled]="customSI" ng-change="update()">
+                                    (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()">
                                     </ng-select>
                                  </div>
                                  <ng-template #elseBlock>
                                     <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
-                                    (change)="setSensorChange()" [disabled]="customSI" ng-change="update()">
+                                    (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()">
                                     </ng-select>
                                  </ng-template>
                               </td>
@@ -102,11 +103,11 @@
                               <td style="text-align: right;">Offset<input type="checkbox" [id]="'of'+tab" (ngModelChange)="changeOffset()" [(ngModel)]="customOf"/><label [for]="'of'+tab"></label></td>
                               <td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Verschiebung</label></td>
                               <td>
-                                 <div *ngIf="customSI;else elseBlock">
-                                    <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" [disabled]="!customOf" />
+                                 <div *ngIf="customOf;else elseBlock">
+                                    <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" [disabled]="'true'" />
                                  </div>
                                  <ng-template #elseBlock>
-                                    <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" [disabled]="!customOf"/>
+                                    <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" [disabled]="'true'"/>
                                  </ng-template>
                               </td>
                               <!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
@@ -125,6 +126,9 @@
 
                               </ng-template>
                               </td>
+                              <td>
+                              {{getPercentage(minValue)}}%
+                              </td>
                               <!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
                            </tr>
                            <tr *ngIf="msg?.lsm.max">
@@ -132,14 +136,17 @@
                               <td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Max</label></td>
                               <td>
                                  <div *ngIf="customMaxValue;else elseBlock">
-                              <input type="range" [(ngModel)]="maxValue" (ngModelChange)="setMaxValue($event)"
-                              [disabled]="'false'" />
+                              <input type="range" [(ngModel)]="maxValue" (ngModelChange)="setMaxValue($event)" [disabled]="'false'" />
                               </div>
                               <ng-template #elseBlock>
                                  <input type="range" [(ngModel)]="maxValue" (ngModelChange)="setMaxValue($event)"
                                     [disabled]="'true'" />
-
+                                                            
                               </ng-template>
+                              </td>
+                              <td>
+                              {{getPercentage(maxValue)}}%
+                     
                               </td>
                               <!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
                            </tr>
@@ -198,7 +205,7 @@
    </main>
    <footer>
       <ul class="button-container">
-         <li><a href="http://www.protronic-gmbh.de" target="_blank" class="logolink"><img src="/assets/logo_neg.png" class="logo" /></a></li>
+         <li><a href="http://www.protronic-gmbh.de" target="_blank" class="logolink"><img src="./assets/logo_neg.png" class="logo" /></a></li>
          <li><a href="http://www.protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf" target="_blank" class="downloadlink"><i
             class="fa fa-file-pdf-o" aria-hidden="true"></i>Anleitung (DE)</a></li>
       </ul>
