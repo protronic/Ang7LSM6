@@ -69,6 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
   customOf = true;
   customMinValue = true;
   customMaxValue = true;
+
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -77,9 +78,8 @@ export class AppComponent implements OnInit, OnDestroy {
   strData = '';
   ngOnInit() {
     this.wsUrl = window.location.hostname;
-    this.connect();
-    console.log(JSON.parse(DEFAULT_CONF));
 
+    this.connect();
   }
   changeMax() {
     this.customMaxValue = !this.customMaxValue;
@@ -87,6 +87,8 @@ export class AppComponent implements OnInit, OnDestroy {
   changeTab(i: number) {
     this.tab = i;
     this.offSetvalue = this.msg.lsm.of[this.tab];
+    this.maxValue = this.msg.lsm.max[this.tab] / 2.53;
+    this.minValue = this.msg.lsm.min[this.tab] / 2.53;
   }
   ngOnDestroy() {
     this.lsm6Subscription.unsubscribe();
@@ -139,6 +141,8 @@ export class AppComponent implements OnInit, OnDestroy {
           if (!this.msg) {
             this.msg = data.json();
             this.loaded = true;
+            this.maxValue = this.msg.lsm.max[this.tab] / 2.53;
+            this.minValue = this.msg.lsm.min[this.tab] / 2.53;
           }
         });
     } catch (err) {
@@ -177,7 +181,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   setOffset(event) {
     this.msg.lsm.of[this.tab] = (event * 2.56);
-    console.log(this.msg.lsm.of);
   }
   uploadJsonFile(e) {
     const file: File = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
