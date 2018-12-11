@@ -97,7 +97,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   getPercentage(i: number) {
     const tmp = i.toFixed(2);
-    if (tmp === '99.60') {
+    if (tmp === '99.61') {
       return '100';
     } else {
       return tmp;
@@ -109,21 +109,26 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   changeMax() {
     this.customMaxValue = !this.customMaxValue;
+    if (!this.customMaxValue) {
+      this.msg.lsm.max[this.tab] = 254;
+      this.maxValue = 100;
+    }
   }
   changeTab(i: number) {
+
     this.tab = i;
     this.offSetvalue = this.msg.lsm.of[this.tab];
-    this.maxValue = this.msg.lsm.max[this.tab] / 2.53;
-    this.minValue = this.msg.lsm.min[this.tab] / 2.53;
+    this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
+    this.minValue = this.msg.lsm.min[this.tab] / 2.54;
 
     if (this.msg.lsm.si[this.tab] !== this.tmpSi[this.tab]) {
       this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
     }
-    this.sensorSelection = this.msg.lsm.si[this.tab];
+    this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
   }
   refreshMinMax() {
-    this.maxValue = this.msg.lsm.max[this.tab] / 2.53;
-    this.minValue = this.msg.lsm.min[this.tab] / 2.53;
+    this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
+    this.minValue = this.msg.lsm.min[this.tab] / 2.54;
   }
   ngOnDestroy() {
     this.lsm6Subscription.unsubscribe();
@@ -131,11 +136,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   setSensorChange() {
 
-    this.tmpSi[this.tab] = this.sensorSelection;
-    this.msg.lsm.si[this.tab] = this.sensorSelection;
+    this.tmpSi[this.tab] = this.sensorSelection - 1;
+    this.msg.lsm.si[this.tab] = this.sensorSelection - 1;
+    console.log('hier');
+    console.log(this.tmpSi[this.tab]);
+    console.log(this.msg.lsm.si[this.tab]);
   }
   changeMin() {
     this.customMinValue = !this.customMinValue;
+    if (!this.customMinValue) {
+      this.msg.lsm.si[this.tab] = 96;
+      this.minValue = 96 / 2.54;
+    }
   }
   changeOffset() {
     this.customOf = !this.customOf;
@@ -152,16 +164,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.lsm6Service.connect(this.wsUrl);
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
-        console.log(JSON.parse(message.data));
+        console.log(message.data);
         mergeObjects(this.msg, JSON.parse(message.data));
-
+        this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
         this.wsConected = true;
         this.refreshMinMax();
-
         if (this.copied) {
-          if (this.tmpSi[this.tab] !== this.msg.lsm.si[this.tab]) {
+
+          if (this.tmpSi[this.tab] !== this.msg.lsm.si[this.tab] + 1) {
             this.sensorSelection = this.tmpSi[this.tab];
             this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
 
@@ -169,11 +181,12 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         } else {
           this.tmpSi = this.msg.lsm.si;
+          this.addIndex();
           this.copied = true;
         }
 
-        console.log(this.msg.lsm.si);
-        this.sensorSelection = this.msg.lsm.si[this.tab];
+        this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
+
       }, error => {
         this.wsUrl = 'lsm6';
         this.lsm6Subscription.unsubscribe();
@@ -190,8 +203,8 @@ export class AppComponent implements OnInit, OnDestroy {
           if (!this.msg) {
             this.msg = data.json();
             this.loaded = true;
-            this.maxValue = this.msg.lsm.max[this.tab] / 2.53;
-            this.minValue = this.msg.lsm.min[this.tab] / 2.53;
+            this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
+            this.minValue = this.msg.lsm.min[this.tab] / 2.54;
           }
         });
     } catch (err) {
@@ -203,10 +216,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
   }
-
+  addIndex() {
+    const tmp = this.msg.lsm.si;
+    this.msg.lsm.si = [];
+    tmp.forEach(t => this.msg.lsm.si.push(t + 1));
+  }
   disconnect() {
     this.lsm6Service.closeSocket();
     this.wsConected = false;
+    this.copied = false;
   }
 
   sendObjToLSM6() {
@@ -284,10 +302,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return 'schalten';
   }
   setMinValue(event) {
-    this.msg.lsm.min[this.tab] = 2.53 * event;
+    this.msg.lsm.min[this.tab] = 2.54 * event;
   }
   setMaxValue(event) {
-    this.msg.lsm.max[this.tab] = 2.53 * event;
+    this.msg.lsm.max[this.tab] = 2.54 * event;
   }
   //  refreshSelect(value: any): void {
   ////    this.wsUrl = value;

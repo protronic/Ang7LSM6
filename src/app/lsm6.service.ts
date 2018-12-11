@@ -72,7 +72,6 @@ export class Lsm6Service {
     // that messages are queued and delivered when the websocket reconnects.
     // A regular Subject can be used to discard messages sent when the websocket
     // is disconnected.
-    console.log(JSON.parse(message));
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     }

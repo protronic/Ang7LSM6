@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prodDeploy": "npm run buildProd && npm run to-couch",
-    "buildProd": "ng build --base-href=. --prod --build-optimizer --output-hashing none",
+    "buildProd": "ng build --base-href=./app --prod --build-optimizer --output-hashing none",
     "to-couch": "angular_couch_deployment.sh -d dist/Ang7LSM6 -b http://prot-subuntu:5985 -o Ang7LSM6 -a ang_prot-wiki"
   },
   "private": true,
