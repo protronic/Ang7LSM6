@@ -78,10 +78,34 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   strData = '';
   copied = false;
+  current_config_tab: number;
+
   ngOnInit() {
     this.wsUrl = window.location.hostname;
 
     this.connect();
+  }
+
+  set_curret_config_tab(new_config_tab: number) {
+
+    console.log(new_config_tab);
+    console.log(this.current_config_tab);
+    console.log(this.current_config_tab === new_config_tab);
+
+    if (this.current_config_tab !== undefined) {
+      if (this.current_config_tab === new_config_tab) {
+        this.showDetails = !this.showDetails;
+      } else {
+        this.current_config_tab = new_config_tab;
+        if (!this.showDetails) {
+          this.showDetails = true;
+        }
+      }
+    } else {
+      this.current_config_tab = new_config_tab;
+      this.showDetails = true;
+    }
+
   }
   getDilBinary() {
     if (this.msg) {
