@@ -61,7 +61,6 @@ export class Lsm6Service {
       this.socket.close();
       console.log('LSM6_mes: ' + this.socket.readyState);
     }
-    console.log(this.socket);
     this.socket = new WebSocket(this.url);
   }
   public closeSocket() {

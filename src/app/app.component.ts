@@ -82,15 +82,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.wsUrl = window.location.hostname;
+    try {
+      this.connect();
+    } catch (error) {
+      console.log(error);
+      this.get_data();
+    }
 
-    this.connect();
   }
 
   set_curret_config_tab(new_config_tab: number) {
 
-    console.log(new_config_tab);
-    console.log(this.current_config_tab);
-    console.log(this.current_config_tab === new_config_tab);
 
     if (this.current_config_tab !== undefined) {
       if (this.current_config_tab === new_config_tab) {
@@ -162,9 +164,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.tmpSi[this.tab] = this.sensorSelection - 1;
     this.msg.lsm.si[this.tab] = this.sensorSelection - 1;
-    console.log('hier');
-    console.log(this.tmpSi[this.tab]);
-    console.log(this.msg.lsm.si[this.tab]);
+
   }
   changeMin() {
     this.customMinValue = !this.customMinValue;
@@ -180,7 +180,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.customSI = !this.customSI;
   }
   update() {
-    console.log('called!2');
+
   }
   connect() {
 
@@ -188,7 +188,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.lsm6Service.connect(this.wsUrl);
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
-        console.log(message.data);
         mergeObjects(this.msg, JSON.parse(message.data));
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
@@ -211,34 +210,31 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
 
-      }, error => {
-        this.wsUrl = 'lsm6';
-        this.lsm6Subscription.unsubscribe();
-        this.wsConected = false;
       }, () => {
         this.lsm6Subscription.unsubscribe();
         this.wsState = 'Verbindung wiederherstellen?';
         this.wsConected = false;
       });
-
-    try {
-      this.http.get('assets/config.json')
-        .subscribe(data => {
-          if (!this.msg) {
-            this.msg = data.json();
-            this.loaded = true;
-            this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
-            this.minValue = this.msg.lsm.min[this.tab] / 2.54;
-          }
-        });
-    } catch (err) {
-      if (!this.loaded) {
-        this.msg = JSON.parse(DEFAULT_CONF);
-        console.log('config.json konnte nicht geladen werden, verwende standart Werte.\n' + JSON.stringify(DEFAULT_CONF));
-        this.loaded = true;
-      }
-    }
-
+    this.get_data();
+  }
+  get_data() {
+    this.http.get('assets/config.json')
+      .subscribe(data => {
+        console.log(data.json());
+        if (!this.msg) {
+          this.msg = data.json();
+          this.loaded = true;
+          this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
+          this.minValue = this.msg.lsm.min[this.tab] / 2.54;
+        }
+      }, error => {
+        if (!this.loaded) {
+          this.msg = JSON.parse(DEFAULT_CONF);
+          console.log(error);
+          // console.log('config.json konnte nicht geladen werden, verwende standart Werte.\n' + JSON.stringify(DEFAULT_CONF));
+          this.loaded = true;
+        }
+      });
   }
   addIndex() {
     const tmp = this.msg.lsm.si;
