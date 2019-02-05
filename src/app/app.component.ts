@@ -64,6 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
   offSetvalue = 0;
   minValue = 0;
   maxValue = 0;
+  mode_value = 0;
   ready = true;
   customSI = false;
   customOf = false;
@@ -71,24 +72,26 @@ export class AppComponent implements OnInit, OnDestroy {
   customMaxValue = false;
   customDil = false;
   tmpSi = [1, 2, 3, 4, 5, 6];
+  current_mode: boolean[];
+  strData = '';
+  copied = false;
+  current_config_tab: number;
+  tmp = true;
+
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
     this.ipItems = IP_ITEMS;
   }
-  strData = '';
-  copied = false;
-  current_config_tab: number;
 
   ngOnInit() {
     this.wsUrl = window.location.hostname;
     try {
       this.connect();
+
     } catch (error) {
-      console.log(error);
       this.get_data();
     }
-
   }
 
   set_curret_config_tab(new_config_tab: number) {
@@ -140,6 +143,23 @@ export class AppComponent implements OnInit, OnDestroy {
       this.maxValue = 100;
     }
   }
+  create_mode(): boolean[] {
+    const tmp = this.msg.sens.mo[this.tab].toString(2);
+    const res = [];
+    for (let i = 0; i < tmp.length; i++) {
+      const element = Boolean(Number(tmp[i]));
+      res.push(element);
+    }
+    while (res.length < 8) {
+      res.unshift(false);
+    }
+
+    return res;
+  }
+  changeMode() {
+    this.msg.sens.mo[this.tab] = 2.55 * this.mode_value;
+  }
+
   changeTab(i: number) {
 
     this.tab = i;
@@ -226,6 +246,8 @@ export class AppComponent implements OnInit, OnDestroy {
           this.loaded = true;
           this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
           this.minValue = this.msg.lsm.min[this.tab] / 2.54;
+          this.current_mode = this.create_mode();
+
         }
       }, error => {
         if (!this.loaded) {
@@ -236,6 +258,22 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  change_current_mode(index: number) {
+    this.current_mode[index] = !this.current_mode[index];
+    this.update_mo();
+  }
+
+  update_mo() {
+    let tmp = 0;
+    for (let i = 0; i < this.current_mode.length; i++) {
+      if (this.current_mode[i]) {
+        tmp += Math.pow(2, 7 - i);
+      }
+    }
+    this.msg.sens.mo[this.tab] = tmp;
+  }
+
   addIndex() {
     const tmp = this.msg.lsm.si;
     this.msg.lsm.si = [];
@@ -326,6 +364,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   setMaxValue(event) {
     this.msg.lsm.max[this.tab] = 2.54 * event;
+  }
+  string_to_bool(content: string) {
+    return Boolean(Number(content));
   }
   //  refreshSelect(value: any): void {
   ////    this.wsUrl = value;
