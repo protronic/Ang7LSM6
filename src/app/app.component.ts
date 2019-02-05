@@ -171,6 +171,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
     }
     this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
+    this.current_config_tab = this.msg.sens.mo[this.tab];
   }
   refreshMinMax() {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
