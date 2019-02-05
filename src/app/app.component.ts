@@ -171,7 +171,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
     }
     this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
-    this.current_config_tab = this.msg.sens.mo[this.tab];
+    console.log(this.msg.sens.mo[this.tab]);
+    this.current_mode = this.create_mode();
   }
   refreshMinMax() {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
@@ -209,6 +210,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.lsm6Service.connect(this.wsUrl);
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
+        console.log(JSON.parse(message.data));
         mergeObjects(this.msg, JSON.parse(message.data));
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
@@ -230,6 +232,12 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
+        if (this.tab) {
+          // this.change_current_mode(this.tab);
+          this.current_mode = this.create_mode();
+          console.log(this.create_mode());
+        }
+
 
       }, () => {
         this.lsm6Subscription.unsubscribe();
@@ -241,7 +249,6 @@ export class AppComponent implements OnInit, OnDestroy {
   get_data() {
     this.http.get('assets/config.json')
       .subscribe(data => {
-        console.log(data.json());
         if (!this.msg) {
           this.msg = data.json();
           this.loaded = true;
