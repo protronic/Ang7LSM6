@@ -24,6 +24,7 @@ export interface Lsm6Data {
     ot: number[],
     ts: number[],
     mo: number[],
+    pot: number[]
   };
 }
 

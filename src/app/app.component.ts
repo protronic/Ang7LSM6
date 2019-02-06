@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, OnDestroy {
   copied = false;
   current_config_tab: number;
   tmp = true;
-
+  customPot = 0;
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -176,6 +176,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
     this.current_mode = this.create_mode();
+    this.customPot = this.get_costum_pot();
   }
   refreshMinMax() {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
@@ -236,7 +237,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
         this.current_mode = this.create_mode();
-
+        this.customPot = this.get_costum_pot();
 
       }, () => {
         this.lsm6Subscription.unsubscribe();
@@ -244,6 +245,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.wsConected = false;
       });
     this.get_data();
+  }
+  get_costum_pot(): number {
+    if (this.tab !== undefined) {
+      return this.msg.sens.pot[this.tab];
+    } else {
+      return 0;
+    }
   }
   get_data() {
     this.http.get('assets/config.json')
