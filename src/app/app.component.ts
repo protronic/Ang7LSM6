@@ -247,8 +247,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.get_data();
   }
   get_costum_pot(): number {
+    console.log(this.msg.sens.pot[this.tab]);
     if (this.tab !== undefined) {
-      return this.msg.sens.pot[this.tab];
+      return (this.msg.sens.pot[this.tab] / 256) * 100;
     } else {
       return 0;
     }

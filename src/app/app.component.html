@@ -165,6 +165,9 @@
                         <input type="range" [id]="'of'+tab" (ngModelChange)="changeOffset()" [(ngModel)]="customPot"
                           [disabled]="'true'" /><label [for]="'of'+tab"></label>
                       </td>
+                      <td>
+                        {{customPot}} %
+                      </td>
                     </tr>
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 2">
