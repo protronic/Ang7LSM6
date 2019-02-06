@@ -49,6 +49,23 @@
               <td class="edit-prog" colspan="3">
                 <table class="edit-prog">
                   <ng-container *ngIf="current_config_tab === 0">
+                    <tr *ngIf="msg?.lsm.si">
+                      <td style="text-align: right;">Sensorinput<input type="checkbox" [id]="'si'+tab" (ngModelChange)="changeSI()"
+                          [(ngModel)]="customSI" /><label [for]="'si'+tab"></label></td>
+                      <td><label><i class="typcn typcn-weather-sunny" aria-hidden="true"></i> Sensor</label></td>
+                      <td>
+                        <div *ngIf="customSI;else elseBlock">
+                          <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
+                            (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()">
+                          </ng-select>
+                        </div>
+                        <ng-template #elseBlock>
+                          <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
+                            (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()">
+                          </ng-select>
+                        </ng-template>
+                      </td>
+                    </tr>
                     <tr *ngIf="true">
                       <td></td>
                       <td><label><span class="typcn typcn-weather-sunny" aria-hidden="true"></span> Sensor</label></td>
@@ -90,23 +107,6 @@
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 1">
 
-                    <tr *ngIf="msg?.lsm.si">
-                      <td style="text-align: right;">Sensorinput<input type="checkbox" [id]="'si'+tab" (ngModelChange)="changeSI()"
-                          [(ngModel)]="customSI" /><label [for]="'si'+tab"></label></td>
-                      <td><label><i class="typcn typcn-weather-sunny" aria-hidden="true"></i> Sensor</label></td>
-                      <td>
-                        <div *ngIf="customSI;else elseBlock">
-                          <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
-                            (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()">
-                          </ng-select>
-                        </div>
-                        <ng-template #elseBlock>
-                          <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
-                            (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()">
-                          </ng-select>
-                        </ng-template>
-                      </td>
-                    </tr>
                     <tr *ngIf="msg?.lsm.of">
                       <td style="text-align: right;">Offset<input type="checkbox" [id]="'of'+tab" (ngModelChange)="changeOffset()"
                           [(ngModel)]="customOf" /><label [for]="'of'+tab"></label></td>
@@ -161,22 +161,22 @@
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 2">
                     <tr *ngIf="msg?.sens.mo">
-                      <td style="text-align: left;">Treppenlicht Taster:<input type="checkbox" [id]="'mode + 0'+tab"
-                          (click)="change_current_mode(0)" [(ngModel)]="current_mode[0]" /><label [for]="'mode + 0'+tab"></label></td>
-                      <td style="text-align: left;">Dämmerungs Schalter:<input type="checkbox" [id]="'mode + 1'+tab"
-                          (click)="change_current_mode(1)" [(ngModel)]="current_mode[1]" /><label [for]="'mode + 1'+tab"></label></td>
+                      <td style="text-align: left;">Nachdimm Taster:<input type="checkbox" [id]="'mode + 0'+tab"
+                          (click)="change_current_mode(7)" [(ngModel)]="current_mode[7]" /><label [for]="'mode + 0'+tab"></label></td>
+                      <td style="text-align: left;">LBM Poti:<input type="checkbox" [id]="'mode + 1'+tab" (click)="change_current_mode(6)"
+                          [(ngModel)]="current_mode[6]" /><label [for]="'mode + 1'+tab"></label></td>
                     </tr>
                     <tr>
-                      <td style="text-align: left;">LBM Bewegungsmelder:<input type="checkbox" [id]="'mode + 2'+tab"
-                          (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 2'+tab"></label></td>
-                      <td style="text-align: left;">LBM Grenzwertfunktion:<input type="checkbox" [id]="'mode + 3'+tab"
-                          (click)="change_current_mode(3)" [(ngModel)]="current_mode[3]" /><label [for]="'mode + 3'+tab"></label></td>
+                      <td style="text-align: left;">LBM Grenzwertfunktion:<input type="checkbox" [id]="'mode + 2'+tab"
+                          (click)="change_current_mode(5)" [(ngModel)]="current_mode[5]" /><label [for]="'mode + 2'+tab"></label></td>
+                      <td style="text-align: left;">LBM Bewegungsmelder:<input type="checkbox" [id]="'mode + 3'+tab"
+                          (click)="change_current_mode(4)" [(ngModel)]="current_mode[4]" /><label [for]="'mode + 3'+tab"></label></td>
                     </tr>
                     <tr>
-                      <td style="text-align: left;">LBM Poti:<input type="checkbox" [id]="'mode + 4'+tab" (click)="change_current_mode(4)"
-                          [(ngModel)]="current_mode[4]" /><label [for]="'mode + 4'+tab"></label></td>
-                      <td style="text-align: left;">Nachdimm Taster:<input type="checkbox" [id]="'mode + 5'+tab"
-                          (click)="change_current_mode(5)" [(ngModel)]="current_mode[5]" /><label [for]="'mode + 5'+tab"></label></td>
+                      <td style="text-align: left;">Dämmerungs Schalter:<input type="checkbox" [id]="'mode + 4'+tab"
+                          (click)="change_current_mode(3)" [(ngModel)]="current_mode[3]" /><label [for]="'mode + 4'+tab"></label></td>
+                      <td style="text-align: left;">Treppenlicht Taster:<input type="checkbox" [id]="'mode + 5'+tab"
+                          (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 5'+tab"></label></td>
                     </tr>
                   </ng-container>
                 </table>

@@ -213,8 +213,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.lsm6Service.connect(this.wsUrl);
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
-        console.log(JSON.parse(message.data));
         mergeObjects(this.msg, JSON.parse(message.data));
+        console.log(this.msg);
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
@@ -235,11 +235,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
-        if (this.tab) {
-          // this.change_current_mode(this.tab);
-          this.current_mode = this.create_mode();
-          console.log(this.create_mode());
-        }
+        this.current_mode = this.create_mode();
 
 
       }, () => {
