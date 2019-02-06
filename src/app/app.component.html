@@ -187,7 +187,12 @@
                       <td style="text-align: left;">LBM Poti:<input type="checkbox" [id]="'mode + 4'+tab" (click)="change_current_mode(3)"
                           [(ngModel)]="current_mode[3]" /><label [for]="'mode + 4'+tab"></label></td>
                       <td style="text-align: left;">Nachdimm Taster:<input type="checkbox" [id]="'mode + 5'+tab"
-                          (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 5'+tab"></label></td>
+                          (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 5'+tab"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left;">Globaler Bewegungsmelder:<input type="checkbox" [id]="'mode + 7'+tab"
+                          (click)="change_current_mode(0)" [(ngModel)]="current_mode[0]" /><label [for]="'mode + 7'+tab"></label></td>
                     </tr>
                   </ng-container>
                 </table>
