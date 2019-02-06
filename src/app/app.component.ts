@@ -144,17 +144,21 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   create_mode(): boolean[] {
-    const tmp = this.msg.sens.mo[this.tab].toString(2);
-    const res = [];
-    for (let i = 0; i < tmp.length; i++) {
-      const element = Boolean(Number(tmp[i]));
-      res.push(element);
-    }
-    while (res.length < 8) {
-      res.unshift(false);
-    }
+    if (this.msg.sens.mo[this.tab]) {
+      const tmp = this.msg.sens.mo[this.tab].toString(2);
+      const res = [];
+      for (let i = 0; i < tmp.length; i++) {
+        const element = Boolean(Number(tmp[i]));
+        res.push(element);
+      }
+      while (res.length < 8) {
+        res.unshift(false);
+      }
 
-    return res;
+      return res;
+    } else {
+      return [];
+    }
   }
   changeMode() {
     this.msg.sens.mo[this.tab] = 2.55 * this.mode_value;
@@ -171,7 +175,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
     }
     this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
-    console.log(this.msg.sens.mo[this.tab]);
     this.current_mode = this.create_mode();
   }
   refreshMinMax() {

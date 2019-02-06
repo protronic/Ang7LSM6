@@ -30,8 +30,8 @@
         <li>
           <table class="slider">
             <tr>
-              <td class="col1 edit-prog-icon"><span class="typcn typcn-cog" (click)="set_curret_config_tab(0)"></span></td>
-              <td class="col1 edit-prog-icon"><span class="typcn typcn-cog" (click)="set_curret_config_tab(1)"></span></td>
+              <td class="col1 edit-prog-icon"><span class="typcn typcn-weather-sunny" (click)="set_curret_config_tab(0)"></span></td>
+              <td class="col1 edit-prog-icon"><span class="fa fa-sliders" (click)="set_curret_config_tab(1)"></span></td>
               <td class="col1 edit-prog-icon"><span class="typcn typcn-cog" (click)="set_curret_config_tab(2)"></span></td>
               <td class="col2">Lichtszene {{tab + 1}}
                 {{getOverrunTimestemp()}}
@@ -161,23 +161,22 @@
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 2">
                     <tr *ngIf="msg?.sens.mo">
-                      <td style="text-align: right;">Modebit 0:<input type="checkbox" [id]="'mode + 0'+tab" (click)="change_current_mode(0)"
-                          [(ngModel)]="current_mode[0]" /><label [for]="'mode + 0'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 1:<input type="checkbox" [id]="'mode + 1'+tab" (click)="change_current_mode(1)"
-                          [(ngModel)]="current_mode[1]" /><label [for]="'mode + 1'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 2:<input type="checkbox" [id]="'mode + 2'+tab" (click)="change_current_mode(2)"
-                          [(ngModel)]="current_mode[2]" /><label [for]="'mode + 2'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 3:<input type="checkbox" [id]="'mode + 3'+tab" (click)="change_current_mode(3)"
-                          [(ngModel)]="current_mode[3]" /><label [for]="'mode + 3'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 4:<input type="checkbox" [id]="'mode + 4'+tab" (click)="change_current_mode(4)"
+                      <td style="text-align: left;">Treppenlicht Taster:<input type="checkbox" [id]="'mode + 0'+tab"
+                          (click)="change_current_mode(0)" [(ngModel)]="current_mode[0]" /><label [for]="'mode + 0'+tab"></label></td>
+                      <td style="text-align: left;">Dämmerungs Schalter:<input type="checkbox" [id]="'mode + 1'+tab"
+                          (click)="change_current_mode(1)" [(ngModel)]="current_mode[1]" /><label [for]="'mode + 1'+tab"></label></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left;">LBM Bewegungsmelder:<input type="checkbox" [id]="'mode + 2'+tab"
+                          (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 2'+tab"></label></td>
+                      <td style="text-align: left;">LBM Grenzwertfunktion:<input type="checkbox" [id]="'mode + 3'+tab"
+                          (click)="change_current_mode(3)" [(ngModel)]="current_mode[3]" /><label [for]="'mode + 3'+tab"></label></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left;">LBM Poti:<input type="checkbox" [id]="'mode + 4'+tab" (click)="change_current_mode(4)"
                           [(ngModel)]="current_mode[4]" /><label [for]="'mode + 4'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 5:<input type="checkbox" [id]="'mode + 5'+tab" (click)="change_current_mode(5)"
-                          [(ngModel)]="current_mode[5]" /><label [for]="'mode + 5'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 6:<input type="checkbox" [id]="'mode + 6'+tab" (click)="change_current_mode(6)"
-                          [(ngModel)]="current_mode[6]" /><label [for]="'mode + 6'+tab"></label></td>
-                      <td style="text-align: right;">Modebit 7:<input type="checkbox" [id]="'mode + 7'+tab" (click)="change_current_mode(7)"
-                          [(ngModel)]="current_mode[7]" /><label [for]="'mode + 7'+tab"></label>
-                      </td>
+                      <td style="text-align: left;">Nachdimm Taster:<input type="checkbox" [id]="'mode + 5'+tab"
+                          (click)="change_current_mode(5)" [(ngModel)]="current_mode[5]" /><label [for]="'mode + 5'+tab"></label></td>
                     </tr>
                   </ng-container>
                 </table>
