@@ -303,6 +303,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sendObjToLSM6() {
     if (this.ready) {
       this.ready = false;
+      console.log(this.j);
       const s = JSON.stringify(this.j);
       this.lsm6Service.send(s);
       this.j = {};

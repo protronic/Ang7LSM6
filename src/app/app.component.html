@@ -104,21 +104,13 @@
                         Min.
                       </td>
                     </tr>
-                    <tr>
-                      <td style="text-align: right;">Pot</td>
-                      <td></td>
-                      <td>
-                        <input type="range" [id]="'of'+tab" (ngModelChange)="changeOffset()" [(ngModel)]="customPot"
-                          [disabled]="'true'" /><label [for]="'of'+tab"></label>
-                      </td>
-                    </tr>
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 1">
 
                     <tr *ngIf="msg?.lsm.of">
                       <td style="text-align: right;">Offset<input type="checkbox" [id]="'of'+tab" (ngModelChange)="changeOffset()"
                           [(ngModel)]="customOf" /><label [for]="'of'+tab"></label></td>
-                      <td><label><i class="typcn typcn-arrow-left" aria-hidden="true"></i> Verschiebung</label></td>
+                      <td><label><i class="fa fa-arrows-v" aria-hidden="true"></i> Verschiebung</label></td>
                       <td>
                         <div *ngIf="customOf;else elseBlock">
                           <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" [disabled]="'true'" />
@@ -166,13 +158,21 @@
                       </td>
                       <!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
                     </tr>
+                    <tr>
+                      <td style="text-align: right;">Poti</td>
+                      <td></td>
+                      <td>
+                        <input type="range" [id]="'of'+tab" (ngModelChange)="changeOffset()" [(ngModel)]="customPot"
+                          [disabled]="'true'" /><label [for]="'of'+tab"></label>
+                      </td>
+                    </tr>
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 2">
                     <tr *ngIf="msg?.sens.mo">
-                      <td style="text-align: left;">Nachdimm Taster:<input type="checkbox" [id]="'mode + 0'+tab"
+                      <td style="text-align: left;">Treppenlicht Taster:<input type="checkbox" [id]="'mode + 0'+tab"
                           (click)="change_current_mode(7)" [(ngModel)]="current_mode[7]" /><label [for]="'mode + 0'+tab"></label></td>
-                      <td style="text-align: left;">LBM Poti:<input type="checkbox" [id]="'mode + 1'+tab" (click)="change_current_mode(6)"
-                          [(ngModel)]="current_mode[6]" /><label [for]="'mode + 1'+tab"></label></td>
+                      <td style="text-align: left;">Dämmerungs Schalter:<input type="checkbox" [id]="'mode + 1'+tab"
+                          (click)="change_current_mode(6)" [(ngModel)]="current_mode[6]" /><label [for]="'mode + 1'+tab"></label></td>
                     </tr>
                     <tr>
                       <td style="text-align: left;">LBM Bewegungsmelder:<input type="checkbox" [id]="'mode + 2'+tab"
@@ -181,9 +181,9 @@
                           (click)="change_current_mode(4)" [(ngModel)]="current_mode[4]" /><label [for]="'mode + 3'+tab"></label></td>
                     </tr>
                     <tr>
-                      <td style="text-align: left;">Dämmerungs Schalter:<input type="checkbox" [id]="'mode + 4'+tab"
-                          (click)="change_current_mode(3)" [(ngModel)]="current_mode[3]" /><label [for]="'mode + 4'+tab"></label></td>
-                      <td style="text-align: left;">Treppenlicht Taster:<input type="checkbox" [id]="'mode + 5'+tab"
+                      <td style="text-align: left;">LBM Poti:<input type="checkbox" [id]="'mode + 4'+tab" (click)="change_current_mode(3)"
+                          [(ngModel)]="current_mode[3]" /><label [for]="'mode + 4'+tab"></label></td>
+                      <td style="text-align: left;">Nachdimm Taster:<input type="checkbox" [id]="'mode + 5'+tab"
                           (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 5'+tab"></label></td>
                     </tr>
                   </ng-container>
