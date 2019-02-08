@@ -10,14 +10,7 @@ import { StringifyOptions } from 'querystring';
 import { Subscription } from 'rxjs';
 
 const DEFAULT_CONF =
-  '{"btn": [false,false,false,false,false,false],\
-    "sw": [true,true,true,true,true,true],"tmp": 20, "tic": 0,\
-    "lsm": {"dali": [254, 254, 254, 254, 254, 254], "sp": [0, 0, 0, 0, 0, 0], \
-        "sl": [[255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255],\
-              [255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255], \
-              [255, 255, 255, 255, 255, 255], [255, 255, 255, 255, 255, 255]], "si": [1,2,3,4,5,6]},\
-    "sens": {"ls": [0, 0, 0, 0, 0, 0], "lt": [0, 0, 0, 0, 0, 0], "ot": [0, 0, 0, 0, 0, 0],\
-    "ts":[0, 0, 0, 0, 0, 0], "mo": [0, 0, 0, 0, 0, 0]}}';
+  '{"btn":[4,4,0,0,0,0],"sw":[1,1,1,1,1,1],"tmp":55,"tic":3137037,"lsm":{"min":[96,96,96,96,96,96],"max":[254,254,254,254,254,254],"of":[0,0,0,0,0,0],"si":[1,0,5,5,5,5],"dali":[0,0,0,0,0,0],"sp":[0,0,0,0,0,300],"sl":[[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,201],[255,255,255,255,255,178],[255,255,255,255,255,254]]},"sens":{"ls":[-1,-1,-1,-1,-1,248],"lt":[0,0,0,0,0,0],"ot":[0,0,0,300000,120000,120000],"ts":[0,0,0,0,171129,0],"mo":[0,0,0,65,1,17],"pot":[0,0,0,0,0,204]},"dil":28,"err":6,"mac":"00:50:c2:9c:6f:a2","rev":"117/1.1"}';
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 const IP_ITEMS = [
   { label: 'lsm6' },
@@ -212,10 +205,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     this.lsm6Service.connect(this.wsUrl);
+
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
         mergeObjects(this.msg, JSON.parse(message.data));
-        console.log(this.msg);
+        console.log(JSON.stringify(this.msg));
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
@@ -247,8 +241,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.get_data();
   }
   get_costum_pot(): number {
-    console.log(this.msg.sens.pot[this.tab]);
-    if (this.tab !== undefined) {
+    if (this.tab !== undefined && this.msg.sens.pot[this.tab] !== undefined) {
       return Number(((this.msg.sens.pot[this.tab] / 255) * 100).toFixed(2));
     } else {
       return 0;
@@ -263,6 +256,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
           this.minValue = this.msg.lsm.min[this.tab] / 2.54;
           this.current_mode = this.create_mode();
+
 
         }
       }, error => {
