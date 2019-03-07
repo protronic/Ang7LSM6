@@ -14,6 +14,7 @@ export interface Lsm6Data {
     sl: number[][],
     si: number[],
     of: number[],
+    oa: number[],
     max: number[],
     min: number[]
   };

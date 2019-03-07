@@ -1,16 +1,17 @@
+
 import { JsonCompactPipe, mergeObjects } from './jsonlib/json-compact.pipe';
 import { Lsm6Data, Lsm6Service } from './lsm6.service';
-import { DecimalPipe } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+
 import { saveAs } from 'file-saver';
-import { Injectable, OnDestroy } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { StringifyOptions } from 'querystring';
+import { OnDestroy } from '@angular/core';
+import { Http } from '@angular/http';
+
 import { Subscription } from 'rxjs';
 
 const DEFAULT_CONF =
-  '{"btn":[4,4,0,0,0,0],"sw":[1,1,1,1,1,1],"tmp":55,"tic":3137037,"lsm":{"min":[96,96,96,96,96,96],"max":[254,254,254,254,254,254],"of":[0,0,0,0,0,0],"si":[1,0,5,5,5,5],"dali":[0,0,0,0,0,0],"sp":[0,0,0,0,0,300],"sl":[[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,201],[255,255,255,255,255,178],[255,255,255,255,255,254]]},"sens":{"ls":[-1,-1,-1,-1,-1,248],"lt":[0,0,0,0,0,0],"ot":[0,0,0,300000,120000,120000],"ts":[0,0,0,0,171129,0],"mo":[0,0,0,65,1,17],"pot":[0,0,0,0,0,204]},"dil":28,"err":6,"mac":"00:50:c2:9c:6f:a2","rev":"117/1.1"}';
+  '{"btn":[4,4,0,0,0,0],"sw":[1,1,1,1,1,1],"tmp":55,"tic":3137037,"lsm":{"min":[96,96,96,96,96,96],"max":[254,254,254,254,254,254],"of":[0,0,0,0,0,0],"si":[1,2,3,4,5,6],"dali":[0,0,0,0,0,0],"sp":[0,0,0,0,0,300],"sl":[[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,201],[255,255,255,255,255,178],[255,255,255,255,255,254]]},"sens":{"ls":[-1,-1,-1,-1,-1,248],"lt":[0,0,0,0,0,0],"ot":[0,0,0,300000,120000,120000],"ts":[0,0,0,0,171129,0],"mo":[0,0,0,65,1,17],"pot":[0,0,0,0,0,204]},"dil":28,"err":6,"mac":"00:50:c2:9c:6f:a2","rev":"117/1.1"}';
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 const IP_ITEMS = [
   { label: 'lsm6' },
@@ -71,6 +72,8 @@ export class AppComponent implements OnInit, OnDestroy {
   current_config_tab: number;
   tmp = true;
   customPot = 0;
+  mode_state = ['Aus', 'Schließer', 'Öffner'];
+  current_mode_state = ['Aus', 'Aus', 'Aus', 'Aus', 'Aus', 'Aus'];
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -147,11 +150,25 @@ export class AppComponent implements OnInit, OnDestroy {
       while (res.length < 8) {
         res.unshift(false);
       }
-
+      this.set_mode_state();
       return res;
     } else {
       return [];
     }
+  }
+  set_mode_state() {
+
+    console.log(this.tab);
+    if (this.msg.lsm.oa[this.tab - 1] === 0) {
+      this.current_mode_state[this.tab - 1] = 'Aus';
+    }
+    if (this.msg.lsm.oa[this.tab - 1] === 1) {
+      this.current_mode_state[this.tab - 1] = 'Schließer';
+    }
+    if (this.msg.lsm.oa[this.tab - 1] === 3) {
+      this.current_mode_state[this.tab - 1] = 'Öffner';
+    }
+    // this.current_mode_state.forEach(this.mode_state)
   }
   changeMode() {
     this.msg.sens.mo[this.tab] = 2.55 * this.mode_value;
@@ -183,7 +200,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.tmpSi[this.tab] = this.sensorSelection - 1;
     this.msg.lsm.si[this.tab] = this.sensorSelection - 1;
-
   }
   changeMin() {
     this.customMinValue = !this.customMinValue;
@@ -208,8 +224,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
+
         mergeObjects(this.msg, JSON.parse(message.data));
-        console.log(JSON.stringify(this.msg));
+        console.log(this.msg);
+        console.log(JSON.stringify(message));
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
@@ -228,7 +246,6 @@ export class AppComponent implements OnInit, OnDestroy {
           this.addIndex();
           this.copied = true;
         }
-
         this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
         this.current_mode = this.create_mode();
         this.customPot = this.get_costum_pot();
@@ -270,10 +287,34 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   change_current_mode(index: number) {
-    this.current_mode[index] = !this.current_mode[index];
+    if (index !== 6) {
+      this.current_mode[index] = !this.current_mode[index];
+    } else {
+      this.handle_selected_state();
+    }
     this.update_mo();
-  }
 
+  }
+  handle_selected_state() {
+    switch (this.current_mode_state[this.tab]) {
+      // mode_state
+      case ('Aus'): {
+        this.current_mode[6] = false;
+        this.current_mode[5] = false;
+        break;
+      }
+      case ('Schließer'): {
+        this.current_mode[6] = false;
+        this.current_mode[5] = true;
+        break;
+      }
+      case ('Öffner'): {
+        this.current_mode[6] = true;
+        this.current_mode[5] = true;
+        break;
+      }
+    }
+  }
   update_mo() {
     let tmp = 0;
     for (let i = 0; i < this.current_mode.length; i++) {
@@ -298,7 +339,6 @@ export class AppComponent implements OnInit, OnDestroy {
   sendObjToLSM6() {
     if (this.ready) {
       this.ready = false;
-      console.log(this.j);
       const s = JSON.stringify(this.j);
       this.lsm6Service.send(s);
       this.j = {};
