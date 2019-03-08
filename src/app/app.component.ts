@@ -72,8 +72,10 @@ export class AppComponent implements OnInit, OnDestroy {
   current_config_tab: number;
   tmp = true;
   customPot = 0;
-  mode_state = ['Aus', 'Schließer', 'Öffner'];
+  mode_state = ['Aus', 'Öffner', 'Schließer'];
   current_mode_state = ['Aus', 'Aus', 'Aus', 'Aus', 'Aus', 'Aus'];
+  global_state_lm = ['Aus', 'Globaler Empfänger', 'Globaler Sender'];
+  current_global_state = ['Aus', 'Aus', 'Aus', 'Aus', 'Aus', 'Aus'];
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -140,7 +142,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   create_mode(): boolean[] {
-    if (this.msg.sens.mo[this.tab]) {
+    if (this.msg.sens.mo[this.tab] !== undefined) {
       const tmp = this.msg.sens.mo[this.tab].toString(2);
       const res = [];
       for (let i = 0; i < tmp.length; i++) {
@@ -159,15 +161,12 @@ export class AppComponent implements OnInit, OnDestroy {
   set_mode_state() {
 
     console.log(this.tab);
-    if (this.msg.lsm.oa[this.tab - 1] === 0) {
+    if (this.msg.sens.mo[this.tab - 1] === 255) {
       this.current_mode_state[this.tab - 1] = 'Aus';
+    } else {
+      this.current_mode_state[this.tab - 1] = String(this.current_mode_state[this.tab - 1]);
     }
-    if (this.msg.lsm.oa[this.tab - 1] === 1) {
-      this.current_mode_state[this.tab - 1] = 'Schließer';
-    }
-    if (this.msg.lsm.oa[this.tab - 1] === 3) {
-      this.current_mode_state[this.tab - 1] = 'Öffner';
-    }
+    console.log(this.current_mode);
     // this.current_mode_state.forEach(this.mode_state)
   }
   changeMode() {
@@ -184,7 +183,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.msg.lsm.si[this.tab] !== this.tmpSi[this.tab]) {
       this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
     }
-    this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
+    this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab] - 1];
     this.current_mode = this.create_mode();
     this.customPot = this.get_costum_pot();
   }
@@ -226,8 +225,7 @@ export class AppComponent implements OnInit, OnDestroy {
       (message: MessageEvent) => {
 
         mergeObjects(this.msg, JSON.parse(message.data));
-        console.log(this.msg);
-        console.log(JSON.stringify(message));
+        console.log(message);
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
@@ -247,6 +245,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.copied = true;
         }
         this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
+        console.log(this.sensorSelection);
         this.current_mode = this.create_mode();
         this.customPot = this.get_costum_pot();
 
@@ -273,7 +272,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
           this.minValue = this.msg.lsm.min[this.tab] / 2.54;
           this.current_mode = this.create_mode();
-
+          console.log(this.current_mode);
 
         }
       }, error => {
@@ -287,6 +286,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   change_current_mode(index: number) {
+    console.log(index);
+    console.log(this.current_mode[index]);
     if (index !== 6) {
       this.current_mode[index] = !this.current_mode[index];
     } else {
@@ -314,6 +315,7 @@ export class AppComponent implements OnInit, OnDestroy {
         break;
       }
     }
+
   }
   update_mo() {
     let tmp = 0;
@@ -340,6 +342,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.ready) {
       this.ready = false;
       const s = JSON.stringify(this.j);
+      console.log(s);
       this.lsm6Service.send(s);
       this.j = {};
       this.ready = true;
@@ -357,6 +360,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   setOffset(event) {
     this.msg.lsm.of[this.tab] = (event * 2.56);
+    this.offSetvalue = event;
   }
   uploadJsonFile(e) {
     const file: File = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
