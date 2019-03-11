@@ -1,14 +1,15 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  crossorigin="anonymous">
+
 
 <body>
   <header>
     <div class="logout">
-      <label *ngIf="wsConected; else loginLabel" title="Logout"><i class="fa fa-sign-out" aria-hidden="true" (click)="disconnect()"></i></label>
-      <ng-template #loginLabel> <label title="Login"><i class="fa fa-sign-in" aria-hidden="true" (click)="connect()"></i></label></ng-template>
+      <label *ngIf="wsConected; else loginLabel" title="Logout"><i class="fas fa-sign-out-alt" aria-hidden="true"
+          (click)="disconnect()"></i></label>
+      <ng-template #loginLabel> <label title="Login"><i class="fas fa-sign-in-alt" aria-hidden="true" (click)="connect()"></i></label>
+      </ng-template>
     </div>
     <div class="temperature">
-      <i class="fa fa-history"></i> {{msg?.tic / 3600000 | number:'1.1-1'}}
+      <i class="fas fa-history"></i> {{msg?.tic / 3600000 | number:'1.1-1'}}
       h <span class="typcn typcn-thermometer status"></span>
       {{msg?.tmp}}°C
       <i class="typcn typcn-spanner" aria-hidden="true"></i> Dil {{getDilBinary()}}
@@ -16,11 +17,11 @@
   </header>
   <div class="tab">
     <button class="tablinks" [ngClass]="{active: tab==-1}" type="button" [disabled]="!wsConected" (click)="tab=-1;showDetails=false">
-      <br /> <span class="fa fa-sliders" aria-hidden="true"></span>
+      <br /> <span class="fas fa-sliders-h" aria-hidden="true"></span>
     </button>
     <button *ngFor="let text of tabTexts; let i = index" class="tablinks" [ngClass]="{active: tab==i}" type="button"
       [disabled]="!msg?.sw[i]" (click)="changeTab(i)">
-      {{text}} <br /> <span class="fa fa-tasks" aria-hidden="true"></span>
+      {{text}} <br /> <span class="fas fa-tasks" aria-hidden="true"></span>
     </button>
   </div>
   <main id="content">
@@ -31,9 +32,9 @@
             <tr>
               <td class="col1 edit-prog-icon"><span class="typcn typcn-weather-sunny" (click)="set_curret_config_tab(0)"></span></td>
               <td class="col1 edit-prog-icon"><span (click)="set_curret_config_tab(2)">
-                  <p>🏃</p>
+                  <i class="fas fa-running"></i>
                 </span></td>
-              <td class="col1 edit-prog-icon"><span class="fa fa-sliders" (click)="set_curret_config_tab(1)"></span></td>
+              <td class="col1 edit-prog-icon"><span class="fas fa-sliders-h" (click)="set_curret_config_tab(1)"></span></td>
               <td class="col2">Lichtszene {{tab + 1}}
                 {{getOverrunTimestemp()}}
               </td>
@@ -82,7 +83,7 @@
                           [ngModel]="msg?.lsm.sp[tab] > 0" (ngModelChange)="msg?.lsm.sp[tab] = $event ? 1 : 0" />
                         <label [for]="'sp'+tab"></label>
                       </td>
-                      <td><label><i class="fa fa-bullseye" aria-hidden="true"></i> Sollwert</label></td>
+                      <td><label><i class="fas fa-bullseye" aria-hidden="true"></i> Sollwert</label></td>
                       <td><input type="number" id="sp" min="0" max="20000" value="" class="small-text-input"
                           [(ngModel)]="msg?.lsm.sp[tab]" />
                         Lux
@@ -90,10 +91,10 @@
                     </tr>
                     <tr>
                       <td style="text-align: right;">Dämmerungsschalter LBM Kanal {{sensorSelection}}:
-                        <input type="checkbox" [id]="'mode + 0'+tab" (click)="change_current_mode(7)" [(ngModel)]="!current_mode[7]" /><label
+                        <input type="checkbox" [id]="'mode + 0'+tab" (click)="change_current_mode(7)" [(ngModel)]="current_mode[7]" /><label
                           [for]="'mode + 0'+tab"></label>
                       </td>
-                      <td style="text-align: left;"><label><i class="fa fa-adjust" aria-hidden="true"></i>
+                      <td style="text-align: left;"><label><i class="fas fa-adjust" aria-hidden="true"></i>
                           Schwellwert:</label></td>
                       <td><input type="number" id="lt" min="0" max="20000" value="" class="small-text-input"
                           [(ngModel)]="msg?.sens.lt[tab]" />
@@ -116,24 +117,19 @@
                     <tr>
                       <td style="text-align: right;">Offset:<input type="checkbox" [id]="'oa'+tab" [(ngModel)]="msg?.lsm.oa[tab]"
                           [disabled]="'true'" /><label [for]="'oa'+tab"></label></td>
-                      <td><label><i class="fa fa-arrows-v" aria-hidden="true"></i> Verschiebung</label></td>
+                      <td><label><i class="fas fa-arrow-up"></i> Verschiebung</label></td>
                       <td style="text-align: left;">
-                        <div *ngIf="customOf;else elseBlock">
-                          <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" />
-                        </div>
-                        <ng-template #elseBlock>
-                          <input type="range" [(ngModel)]="offSetvalue" (ngModelChange)="setOffset($event)" [disabled]="'true'" />
-                        </ng-template>
+                        <input type="range" [(ngModel)]="offSetvalue" (change)="setOffset($event)" />
                       </td>
                       <td>
-                        {{msg?.lsm.caof[this.tab]}}
+                        {{msg.lsm.caof[tab]}}
                       </td>
                       <!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
                     </tr>
                     <tr>
-                      <td style="text-align: right;">Poti LBM  Kanal {{tab+1}}:<input type="checkbox" [id]="'mode + 4'+tab" (click)="change_current_mode(3)"
-                          [(ngModel)]="current_mode[2]" /><label [for]="'mode + 4'+tab"></label></td>
-                      <td style="text-align: left;"> <label><i class="fa fa-spinner" aria-hidden="true"></i>
+                      <td style="text-align: right;">Poti LBM Kanal {{tab+1}}:<input type="checkbox" [id]="'mode + 4'+tab"
+                          (click)="change_current_mode(2)" [(ngModel)]="current_mode[2]" /><label [for]="'mode + 4'+tab"></label></td>
+                      <td style="text-align: left;"> <label><i class="fas fa-spinner" aria-hidden="true"></i>
                           Potentiometer</label></td>
                       <td>
                         <input type="range" [id]="'of'+tab" (ngModelChange)="changeOffset()" [(ngModel)]="customPot"
@@ -196,27 +192,31 @@
                       </td>
                     </tr>
                     <tr>
+
+                      <td colspan="2" style="text-align: right;">Tast- / Schaltsignal an Eingang {{tab+1}}: <input type="checkbox"
+                          [id]="'mode + 2'+tab" (click)="change_current_mode(3)" [ngModel]="get_inverted_state(3)"
+                          ng-true-value="false" ng-false-value="true" /><label [for]="'mode + 2'+tab"></label></td>
+
+                    </tr>
+                    <tr>
                       <td colspan="1" style="text-align: right;vertical-align:top;"><b> Triggerquellen:</b></td>
 
                       <td colspan="1" style="text-align: right;">Bewegungsmelder LBM Kanal {{sensorSelection}}:
-                        <input type="checkbox" [id]="'mode + 3'+tab" (click)="change_current_mode(2)" [(ngModel)]="current_mode[3]" /><label
-                          [for]="'mode + 3'+tab"></label>
+                        <input type="checkbox" [id]="'mode + 3'+tab" (click)="change_current_mode(4)" [ngModel]="get_inverted_state(4)"
+                          ng-true-value="false" ng-false-value="true" /><label [for]="'mode + 3'+tab"></label>
                       </td>
 
                     </tr>
+
                     <tr>
 
-                      <td colspan="2" style="text-align: right;">Tast- / Schaltsignal an Eingang {{tab+1}}: <input type="checkbox"
-                          [id]="'mode + 2'+tab" (click)="change_current_mode(3)" [(ngModel)]="current_mode[4]" /><label
-                          [for]="'mode + 2'+tab"></label></td>
-
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td colspan="1" style="text-align: right;">Globaler Trigger:
-                          <ng-select class="button" [items]="global_state_lm" [addTag]="true" bindValue="label" [(ngModel)]="current_global_state[tab]"
-                          (click)="change_current_mode(4)">
-                        </ng-select>
+                      <td style="text-align: right;">Globaler Trigger:</td>
+                      <td colspan="2" style="text-align: right;">
+                        <span>
+                          <ng-select class="button" [items]="global_state_lm" [addTag]="true" bindValue="label"
+                            [(ngModel)]="current_global_state[tab]" (click)="change_current_mode(1)">
+                          </ng-select>
+                        </span>
                       </td>
 
                     </tr>
@@ -249,7 +249,7 @@
       </ul>
     </ng-template>
     <ul class="button-container" *ngIf="showConnectionData">
-      <li><label class="button1"><i class="fa fa-link" aria-hidden="true"></i> IP-Adresse: </label></li>
+      <li><label class="button1"><i class="fas fa-link" aria-hidden="true"></i> IP-Adresse: </label></li>
       <li>
         <ng-select class="button" [items]="ipItems" [addTag]="true" bindValue="label" [(ngModel)]="wsUrl"> </ng-select>
       </li>
@@ -267,11 +267,28 @@
           Herunterladen</label>
       </li>
       <li>
-        <label *ngIf="wsConected; else connectLabel" class="button" (click)="j=msg;sendObjToLSM6()"><i class="fa fa-floppy-o"
-            aria-hidden="true"></i> Speichern</label>
+        <label *ngIf="wsConected; else connectLabel" class="button" (click)="j=msg;sendObjToLSM6()">
+          <ng-container *ngIf="transmitting; else elseTemplate">
+            <i class="fas fa-spinner" aria-hidden="true"></i> Übertragung
+          </ng-container>
+          <ng-template #elseTemplate>
+            <i class="fas fa-save" aria-hidden="true"></i> Speichern
+          </ng-template>
+
+        </label>
+
         <ng-template #connectLabel>
-          <label class="button" (click)="showConnectionData=!showConnectionData"><i class="fa fa-sign-in" aria-hidden="true"></i>
-            Verbindung</label>
+          <label class="button" (click)="showConnectionData=!showConnectionData">
+            <ng-container *ngIf="showConnectionData; else elseTemplate">
+              <i class="fas fa-ban"></i> Abbrechen
+            </ng-container>
+            <ng-template #elseTemplate>
+              <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+              Verbindung
+            </ng-template>
+
+          </label>
+
         </ng-template>
       </li>
     </ul>
@@ -281,7 +298,7 @@
       <li><a href="http://www.protronic-gmbh.de" target="_blank" class="logolink"><img src="./assets/logo_neg.png"
             class="logo" /></a></li>
       <li><a href="http://www.protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf" target="_blank"
-          class="downloadlink"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Anleitung (DE)</a></li>
+          class="downloadlink"><i class="fas fa-file-pdf" aria-hidden="true"></i>Anleitung (DE)</a></li>
     </ul>
   </footer>
 

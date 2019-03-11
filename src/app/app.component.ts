@@ -72,10 +72,11 @@ export class AppComponent implements OnInit, OnDestroy {
   current_config_tab: number;
   tmp = true;
   customPot = 0;
-  mode_state = ['Aus', 'Öffner', 'Schließer'];
+  mode_state = ['Aus', 'Schließer', 'Öffner'];
   current_mode_state = ['Aus', 'Aus', 'Aus', 'Aus', 'Aus', 'Aus'];
-  global_state_lm = ['Aus', 'Globaler Empfänger', 'Globaler Sender'];
+  global_state_lm = ['Aus', 'Globaler Sender', 'Globaler Empfänger'];
   current_global_state = ['Aus', 'Aus', 'Aus', 'Aus', 'Aus', 'Aus'];
+  transmitting = false;
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -84,12 +85,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.wsUrl = window.location.hostname;
-    try {
-      this.connect();
-
-    } catch (error) {
-      this.get_data();
-    }
+    this.get_data();
   }
 
   set_curret_config_tab(new_config_tab: number) {
@@ -160,13 +156,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   set_mode_state() {
 
-    console.log(this.tab);
     if (this.msg.sens.mo[this.tab - 1] === 255) {
       this.current_mode_state[this.tab - 1] = 'Aus';
     } else {
       this.current_mode_state[this.tab - 1] = String(this.current_mode_state[this.tab - 1]);
     }
-    console.log(this.current_mode);
     // this.current_mode_state.forEach(this.mode_state)
   }
   changeMode() {
@@ -180,10 +174,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
     this.minValue = this.msg.lsm.min[this.tab] / 2.54;
 
-    if (this.msg.lsm.si[this.tab] !== this.tmpSi[this.tab]) {
-      this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
-    }
-    this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab] - 1];
+    this.sensorSelection = this.msg.lsm.si[this.tab] + 1;
     this.current_mode = this.create_mode();
     this.customPot = this.get_costum_pot();
   }
@@ -212,6 +203,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   changeSI() {
     this.customSI = !this.customSI;
+    if (this.customSI === false) {
+      this.sensorSelection = this.tab + 1;
+    }
   }
   update() {
 
@@ -223,29 +217,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
-
+        console.log(message.data);
+        this.transmitting = false;
         mergeObjects(this.msg, JSON.parse(message.data));
-        console.log(message);
         this.offSetvalue = this.msg.lsm.of[this.tab];
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
         this.wsConected = true;
         this.refreshMinMax();
         if (this.copied) {
-
           if (this.tmpSi[this.tab] !== this.msg.lsm.si[this.tab] + 1) {
-            this.sensorSelection = this.tmpSi[this.tab];
-            this.msg.lsm.si[this.tab] = this.tmpSi[this.tab];
-
-            // this.msg.lsm.si[this.tab] = this.tmpSi;
+            this.sensorSelection = this.msg.lsm.si[this.tab] + 1;
+            this.tmpSi[this.tab] = this.sensorSelection;
           }
         } else {
           this.tmpSi = this.msg.lsm.si;
           this.addIndex();
           this.copied = true;
+          this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
         }
-        this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
-        console.log(this.sensorSelection);
         this.current_mode = this.create_mode();
         this.customPot = this.get_costum_pot();
 
@@ -272,8 +262,6 @@ export class AppComponent implements OnInit, OnDestroy {
           this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
           this.minValue = this.msg.lsm.min[this.tab] / 2.54;
           this.current_mode = this.create_mode();
-          console.log(this.current_mode);
-
         }
       }, error => {
         if (!this.loaded) {
@@ -286,15 +274,52 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   change_current_mode(index: number) {
-    console.log(index);
-    console.log(this.current_mode[index]);
-    if (index !== 6) {
-      this.current_mode[index] = !this.current_mode[index];
-    } else {
-      this.handle_selected_state();
+    switch (index) {
+
+      case (1): {
+        this.handle_selected_global_trigger_state();
+        break;
+      }
+      case (3): {
+        this.current_mode[index] = !this.current_mode[index];
+        break;
+      }
+      case (6): {
+        this.handle_selected_state();
+        break;
+      }
+      case (7): {
+        this.current_mode[index] = !this.current_mode[index];
+        break;
+      }
+      default: {
+        this.current_mode[index] = !this.current_mode[index];
+        break;
+      }
     }
     this.update_mo();
-
+    console.log(this.current_mode);
+  }
+  get_inverted_mode(index) {
+    return !this.current_mode[index];
+  }
+  handle_selected_global_trigger_state() {
+    switch (this.current_global_state[this.tab]) {
+      case ('Aus'): {
+        this.current_mode[0] = false;
+        this.current_mode[1] = false;
+        break;
+      }
+      case ('Globaler Empfänger'): {
+        this.current_mode[0] = true;
+        this.current_mode[1] = false;
+        break;
+      }
+      case ('Globaler Sender'): {
+        this.current_mode[0] = false;
+        this.current_mode[1] = true;
+      }
+    }
   }
   handle_selected_state() {
     switch (this.current_mode_state[this.tab]) {
@@ -305,8 +330,8 @@ export class AppComponent implements OnInit, OnDestroy {
         break;
       }
       case ('Schließer'): {
-        this.current_mode[6] = false;
-        this.current_mode[5] = true;
+        this.current_mode[6] = true;
+        this.current_mode[5] = false;
         break;
       }
       case ('Öffner'): {
@@ -316,6 +341,9 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }
 
+  }
+  get_inverted_state(index) {
+    return !this.current_mode[index];
   }
   update_mo() {
     let tmp = 0;
@@ -328,9 +356,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   addIndex() {
-    const tmp = this.msg.lsm.si;
-    this.msg.lsm.si = [];
-    tmp.forEach(t => this.msg.lsm.si.push(t + 1));
+    this.tmpSi = [];
+    this.msg.lsm.si.forEach(value => {
+      this.tmpSi.push(value + 1);
+    });
   }
   disconnect() {
     this.lsm6Service.closeSocket();
@@ -339,6 +368,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   sendObjToLSM6() {
+    this.transmitting = true;
     if (this.ready) {
       this.ready = false;
       const s = JSON.stringify(this.j);
@@ -359,8 +389,13 @@ export class AppComponent implements OnInit, OnDestroy {
     saveAs(file, 'config.json');
   }
   setOffset(event) {
-    this.msg.lsm.of[this.tab] = (event * 2.56);
-    this.offSetvalue = event;
+    this.msg.lsm.of[this.tab] = Math.round(this.offSetvalue * 2.54);
+    this.offSetvalue = Number(this.offSetvalue.toFixed(2));
+    if (this.wsConected) {
+      this.j = this.msg;
+      this.sendObjToLSM6();
+    }
+
   }
   uploadJsonFile(e) {
     const file: File = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
