@@ -11,7 +11,8 @@
 </table>
 <table class="slider">
 	<tr>
-		<td class="col1"><span style="">{{dimmValue|dimm}} %</span></td>
+    <!-- <td class="col1"><span style="">{{dimmValue|dimm}} %</span></td> -->
+    <td class="col1"><input type="text" [ngModel] = "dimmValue|dimm" (ngModelChange)="setDimm($event)" [disabled]="disabled||dimmValue == 255"/> %</td>
 		<td class="col2"><input type="range" [ngModel] = "dimmValue|dimm" (ngModelChange)="setDimm($event)" [disabled]="disabled||dimmValue == 255"/></td>
 		<!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
 		<td class="col3"><input type="checkbox" [id]="'cb' + channel" [ngModel]="getCBVal()" (change)="toggleActive()" [disabled]="disabled"/> <label

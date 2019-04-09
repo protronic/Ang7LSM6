@@ -29,11 +29,11 @@
         <li>
           <table class="slider">
             <tr>
-              <td class="col1 edit-prog-icon" [ngStyle]=" current_config_tab === 0 && {'color': '#fbde18'}">
+              <td class="col3 edit-prog-icon" [ngStyle]=" current_config_tab === 0 && {'color': '#fbde18'}">
                 <fa-icon [icon]="['fas', 'sun']" (click)="set_curret_config_tab(0)"></fa-icon></td>
-              <td class="col1 edit-prog-icon" [ngStyle]="current_config_tab === 2 && {'color': '#fbde18'}">
+              <td class="col3 edit-prog-icon" [ngStyle]="current_config_tab === 2 && {'color': '#fbde18'}">
                 <fa-icon [icon]="['fas', 'running']" (click)="set_curret_config_tab(2)"></fa-icon></td>
-              <td class="col1 edit-prog-icon" [ngStyle]="current_config_tab === 1 && {'color': '#fbde18'}">
+              <td class="col3 edit-prog-icon" [ngStyle]="current_config_tab === 1 && {'color': '#fbde18'}">
                 <fa-icon [icon]="['fas', 'sliders-h']" (click)="set_curret_config_tab(1)"></fa-icon></td>
               <td class="col2">Lichtszene {{tab + 1}}
                 {{getOverrunTimestemp()}}
@@ -323,7 +323,7 @@
             class="logo" /></a></li>
       <li><a href="http://www.protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf" target="_blank"
           class="downloadlink"><i class="fas fa-file-pdf" aria-hidden="true"></i> Anleitung (DE)</a></li>
-      <li><a class="logolink"><i class="fas fa-code-branch"></i> 0.0.5</a></li>
+      <li><a class="logolink"><i class="fas fa-code-branch"></i> 0.0.6</a></li>
     </ul>
   </footer>
 
