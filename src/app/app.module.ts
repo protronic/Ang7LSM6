@@ -15,8 +15,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {InputTextModule} from 'primeng/inputtext';
 import { MatGridListModule } from '@angular/material/grid-list';
-
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
   declarations: [
@@ -34,9 +36,15 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatFormFieldModule,
     BrowserAnimationsModule,
     MatGridListModule,
-    InputTextModule
+    InputTextModule,
+    FontAwesomeModule
   ],
   providers: [Lsm6Service],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    // Add an icon to the library for convenient access in other components
+    library.add(fas, far);
+  }
+}

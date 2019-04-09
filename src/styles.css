@@ -1,7 +1,4 @@
-@import "~@ng-select/ng-select/themes/default.theme.css";
-@import "~typicons.font/src/font/typicons.css";
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import '../node_modules/primeng/resources/themes/omega/theme.css';
+
 
 
 html {
@@ -41,23 +38,23 @@ video {
 
 /*audio
 :not
- 
+
 (
 [
 controls
 ]
- 
+
 ){
 display
 :
- 
+
 none
 ;
 
-	
+
 height
 :
- 
+
 0
 }*/
 
@@ -126,14 +123,14 @@ img {
 
 /*svg
 :not
- 
+
 (
 :root
- 
+
 ){
 overflow
 :
- 
+
 hidden
 
 
