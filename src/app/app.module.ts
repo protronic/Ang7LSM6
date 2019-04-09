@@ -9,12 +9,9 @@ import { DimmPipe } from './gui/dimm-slider/dimm.pipe';
 import { DimmSliderComponent } from './gui/dimm-slider/dimm-slider.component';
 import { JsonCompactPipe } from './jsonlib/json-compact.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import {InputTextModule} from 'primeng/inputtext';
-import { MatGridListModule } from '@angular/material/grid-list';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -32,10 +29,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
     FormsModule,
     HttpModule,
     NgSelectModule,
-    MatSelectModule,
-    MatFormFieldModule,
     BrowserAnimationsModule,
-    MatGridListModule,
     InputTextModule,
     FontAwesomeModule
   ],
