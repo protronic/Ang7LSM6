@@ -67,7 +67,7 @@ export class Lsm6Service {
     this.socket = new WebSocket(this.url);
   }
   public closeSocket() {
-    this.socket.close(1000);
+    this.socket.close();
   }
   public send(message: string): void {
     // If the websocket is not connected then the QueueingSubject will ensure
@@ -77,6 +77,5 @@ export class Lsm6Service {
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
     }
-
   }
 } // end class ChatService

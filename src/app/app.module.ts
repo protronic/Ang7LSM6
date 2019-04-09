@@ -13,6 +13,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import {InputTextModule} from 'primeng/inputtext';
+import { MatGridListModule } from '@angular/material/grid-list';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +33,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatSelectModule,
     MatFormFieldModule,
     BrowserAnimationsModule,
+    MatGridListModule,
+    InputTextModule
   ],
   providers: [Lsm6Service],
   bootstrap: [AppComponent]

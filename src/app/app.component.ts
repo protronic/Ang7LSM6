@@ -9,6 +9,7 @@ import { OnDestroy } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { Subscription } from 'rxjs';
+import PouchDB from 'pouchdb';
 
 const DEFAULT_CONF =
   '{"btn":[4,4,0,0,0,0],"sw":[1,1,1,1,1,1],"tmp":55,"tic":3137037,"lsm":{"min":[96,96,96,96,96,96],"max":[254,254,254,254,254,254],"of":[0,0,0,0,0,0],"si":[1,2,3,4,5,6],"dali":[0,0,0,0,0,0],"sp":[0,0,0,0,0,300],"sl":[[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,255],[255,255,255,255,255,201],[255,255,255,255,255,178],[255,255,255,255,255,254]]},"sens":{"ls":[-1,-1,-1,-1,-1,248],"lt":[0,0,0,0,0,0],"ot":[0,0,0,300000,120000,120000],"ts":[0,0,0,0,171129,0],"mo":[0,0,0,65,1,17],"pot":[0,0,0,0,0,204]},"dil":28,"err":6,"mac":"00:50:c2:9c:6f:a2","rev":"117/1.1"}';
@@ -77,6 +78,17 @@ export class AppComponent implements OnInit, OnDestroy {
   global_state_lm = ['Aus', 'Globaler Sender', 'Globaler Empfänger'];
   current_global_state = ['Aus', 'Aus', 'Aus', 'Aus', 'Aus', 'Aus'];
   transmitting = false;
+  time_left = 5;
+  connecting = false;
+  connection_failed = false;
+  manually_closed = false;
+  transmition_failed = false;
+  recvied_ping = false;
+  lsm6_entry_set_function = ['Treppenlichtfunktion', 'Tasten, Nachdimmen'];
+  current_entry_function = [
+    'Treppenlichtfunktion', 'Treppenlichtfunktion',
+    'Treppenlichtfunktion', 'Treppenlichtfunktion',
+    'Treppenlichtfunktion', 'Treppenlichtfunktion'];
   constructor(public lsm6Service: Lsm6Service, private http: Http) {
     this.tabTexts = TAB_TEXTS;
     this.sliders = sliders;
@@ -86,14 +98,62 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.wsUrl = window.location.hostname;
     this.get_data();
+    // this.get_data_from_pouch();
   }
+  private get_data_from_pouch() {
+    const db = new PouchDB('IP-Adresses');
+    const items = db.get('IP_ITEMS').catch().then(doc => {
+      this.ipItems = doc['IP_ITEMS'];
+      console.log(doc['IP_ITEMS']);
+      this.ipItems.forEach(element => {
+        console.log(typeof (element) === 'string');
+      });
+    });
+  }
+  private add_to_pouch() {
 
+  }
+  private set_timer() {
+    this.time_left = 5;
+    const timerfunciton = setInterval(() => {
+      if (this.time_left > 0) {
+        this.time_left--;
+      } else {
+        if ((!this.wsConected && !this.manually_closed) || this.transmitting) {
+          this.lsm6Service.closeSocket();
+          this.wsState = 'Verbindungsfehler, nochmals versuchen?';
+          this.connection_failed = true;
+          this.connecting = false;
+          this.wsConected = false;
+          this.showConnectionData = true;
+          if (this.transmitting) {
+            this.transmition_failed = true;
+          }
+
+        } else {
+        }
+        clearInterval(timerfunciton);
+      }
+    }, 1000);
+  }
+  start_ping_pong_timer() {
+    let time_left = 10;
+    const timerfunciton = setInterval(() => {
+      if (time_left > 0) {
+        time_left--;
+      } else {
+
+      }
+    }, 1000);
+  }
   set_curret_config_tab(new_config_tab: number) {
-
 
     if (this.current_config_tab !== undefined) {
       if (this.current_config_tab === new_config_tab) {
         this.showDetails = !this.showDetails;
+        if (!this.showDetails) {
+          this.current_config_tab = undefined;
+        }
       } else {
         this.current_config_tab = new_config_tab;
         if (!this.showDetails) {
@@ -104,7 +164,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.current_config_tab = new_config_tab;
       this.showDetails = true;
     }
-
   }
   getDilBinary() {
     if (this.msg) {
@@ -155,13 +214,21 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   set_mode_state() {
-
-    if (this.msg.sens.mo[this.tab - 1] === 255) {
-      this.current_mode_state[this.tab - 1] = 'Aus';
-    } else {
-      this.current_mode_state[this.tab - 1] = String(this.current_mode_state[this.tab - 1]);
+    switch (this.msg.sens.mo[this.tab]) {
+      case (0): {
+        this.current_global_state[this.tab] = 'Aus';
+        break;
+      }
+      case (64): {
+        this.current_global_state[this.tab] = 'Globaler Sender';
+        break;
+      }
+      case (128): {
+        this.current_global_state[this.tab] = 'Globaler Empfänger';
+        break;
+      }
     }
-    // this.current_mode_state.forEach(this.mode_state)
+
   }
   changeMode() {
     this.msg.sens.mo[this.tab] = 2.55 * this.mode_value;
@@ -170,13 +237,14 @@ export class AppComponent implements OnInit, OnDestroy {
   changeTab(i: number) {
 
     this.tab = i;
-    this.offSetvalue = this.msg.lsm.of[this.tab];
+    this.offSetvalue = this.msg.lsm.of[this.tab] / 2.54;
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
     this.minValue = this.msg.lsm.min[this.tab] / 2.54;
 
     this.sensorSelection = this.msg.lsm.si[this.tab] + 1;
     this.current_mode = this.create_mode();
     this.customPot = this.get_costum_pot();
+    this.update_external_and_global_trigger();
   }
   refreshMinMax() {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
@@ -210,20 +278,27 @@ export class AppComponent implements OnInit, OnDestroy {
   update() {
 
   }
+
   connect() {
-
-
+    this.connection_failed = false;
     this.lsm6Service.connect(this.wsUrl);
+    this.connecting = true;
+    this.transmition_failed = false;
+    this.wsState = 'Verbinden...';
+    this.manually_closed = false;
 
     this.lsm6Subscription = this.lsm6Service.messages.subscribe(
       (message: MessageEvent) => {
         console.log(message.data);
+        this.connection_failed = false;
+        this.connecting = false;
         this.transmitting = false;
         mergeObjects(this.msg, JSON.parse(message.data));
-        this.offSetvalue = this.msg.lsm.of[this.tab];
+        this.offSetvalue = this.msg.lsm.of[this.tab] / 2.54;
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
         this.wsConected = true;
+        this.recvied_ping = true;
         this.refreshMinMax();
         if (this.copied) {
           if (this.tmpSi[this.tab] !== this.msg.lsm.si[this.tab] + 1) {
@@ -237,18 +312,54 @@ export class AppComponent implements OnInit, OnDestroy {
           this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
         }
         this.current_mode = this.create_mode();
+        this.update_external_and_global_trigger();
         this.customPot = this.get_costum_pot();
 
       }, () => {
+        this.lsm6Service.closeSocket();
+        this.wsState = 'Verbindungsfehler, nochmals versuchen?';
+        this.connection_failed = true;
+        this.connecting = false;
+        this.wsConected = false;
         this.lsm6Subscription.unsubscribe();
-        this.wsState = 'Verbindung wiederherstellen?';
+        if (!this.connection_failed) {
+          this.connecting = false;
+          this.wsState = 'Verbindung wiederherstellen?';
+        }
+        this.showConnectionData = true;
         this.wsConected = false;
       });
     this.get_data();
   }
+  update_external_and_global_trigger() {
+    if (this.current_mode) {
+      if (this.current_mode[0] === false && this.current_mode[1] === false) {
+        this.current_global_state[this.tab] = 'Aus';
+      } else {
+        if (this.current_mode[0]) {
+          this.current_global_state[this.tab] = 'Globaler Empfänger';
+        } else {
+          this.current_global_state[this.tab] = 'Globaler Sender';
+        }
+      }
+    }
+
+    if (this.current_mode) {
+      if (this.current_mode[5] === false && this.current_mode[6] === false) {
+        this.current_mode_state[this.tab] = 'Aus';
+      } else {
+        if (this.current_mode[5]) {
+          this.current_mode_state[this.tab] = 'Öffner';
+        } else {
+          this.current_mode_state[this.tab] = 'Schließer';
+        }
+      }
+    }
+
+  }
   get_costum_pot(): number {
     if (this.msg.sens.pot[this.tab] !== undefined) {
-      return Number(((this.msg.sens.pot[this.tab] / 255) * 100).toFixed(2));
+      return Number(((this.msg.sens.pot[this.tab] / 254) * 100).toFixed(2));
     } else {
       return 0;
     }
@@ -297,8 +408,8 @@ export class AppComponent implements OnInit, OnDestroy {
         break;
       }
     }
+
     this.update_mo();
-    console.log(this.current_mode);
   }
   get_inverted_mode(index) {
     return !this.current_mode[index];
@@ -346,6 +457,9 @@ export class AppComponent implements OnInit, OnDestroy {
     return !this.current_mode[index];
   }
   update_mo() {
+    console.log('v');
+    console.log(this.msg.sens.mo);
+    console.log(this.msg.sens.mo[this.tab]);
     let tmp = 0;
     for (let i = 0; i < this.current_mode.length; i++) {
       if (this.current_mode[i]) {
@@ -353,6 +467,9 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }
     this.msg.sens.mo[this.tab] = tmp;
+    console.log('n');
+    console.log(this.msg.sens.mo);
+    console.log(this.msg.sens.mo[this.tab]);
   }
 
   addIndex() {
@@ -365,14 +482,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.lsm6Service.closeSocket();
     this.wsConected = false;
     this.copied = false;
+    this.manually_closed = true;
+    this.wsState = 'Verbinden';
   }
 
   sendObjToLSM6() {
     this.transmitting = true;
+    this.set_timer();
     if (this.ready) {
       this.ready = false;
       const s = JSON.stringify(this.j);
-      console.log(s);
       this.lsm6Service.send(s);
       this.j = {};
       this.ready = true;
