@@ -53,32 +53,18 @@
                   <ng-container *ngIf="current_config_tab === 0">
                     <tr>
                       <td style="text-align: right;">Sensorkanalwahl:<input type="checkbox" [id]="'si'+tab"
-                          (ngModelChange)="changeSI()" [(ngModel)]="customSI" /><label [for]="'si'+tab"></label>
+                          (ngModelChange)="changeSI($event)" [ngModel]="editSi" /><label [for]="'si'+tab"></label>
                       <td colspan="2">
-
-                        <div *ngIf="customSI;else elseBlock">
-
-                          <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
-                            (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()" [searchable]="false"
+                          <ng-select  class="button" [items]="senonsorOptions" [addTag]="true" [ngModel]="msg?.lsm.si[tab] + 1"
+                            (ngModelChange)="changeSelectSI($event)" [disabled]="!editSi" [searchable]="false"
                             [clearable]="false">
                           </ng-select>
-
-                        </div>
-                        <ng-template #elseBlock>
-
-                          <ng-select class="button" [items]="senonsorOptions" [addTag]="true" [(ngModel)]="sensorSelection"
-                            (change)="setSensorChange()" [disabled]="!customSI" ng-change="update()" [searchable]="false"
-                            [clearable]="false">
-                          </ng-select>
-
-                        </ng-template>
                       </td>
-
                     </tr>
                     <tr>
                       <td></td>
                       <td><label><fa-icon [icon]="['fas', 'sun']"></fa-icon> Sensorwert:</label></td>
-                      <td>{{msg?.sens.ls[sensorSelection - 1]}} Lux</td>
+                      <td>{{msg?.sens.ls[msg?.lsm.si[tab]]}} Lux</td>
                     </tr>
                     <tr>
                       <td style="text-align: right;">Tageslichtregelung:<input type="checkbox" [id]="'sp'+tab"
@@ -86,7 +72,6 @@
                         <label [for]="'sp'+tab"></label>
                       </td>
                       <td><label><fa-icon [icon]="['fas', 'bullseye']"></fa-icon> Sollwert:</label></td>
-
                       <td>
                         <input type="number" pInputText id="sp" min="0" max="20000" value="" class="small-text-input"
                           [(ngModel)]="msg?.lsm.sp[tab]" style="text-align: right;" />
@@ -94,7 +79,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td style="text-align: right;">Dämmerungsschalter LBM Kanal {{sensorSelection}}:
+                      <td style="text-align: right;">Dämmerungsschalter LBM Kanal {{msg?.lsm.si[tab] + 1}}:
                         <input type="checkbox" [id]="'mode + 0'+tab" (click)="change_current_mode(7)" [(ngModel)]="current_mode[7]" /><label
                           [for]="'mode + 0'+tab"></label>
                       </td>
@@ -105,10 +90,9 @@
                           [(ngModel)]="msg?.sens.lt[tab]" style="text-align: right;" />
                         Lux
                       </td>
-
                     </tr>
                     <tr colspan="3">
-                      <td style="text-align: right;">Externer Dämmerungsschalter Eingang {{sensorSelection}}:
+                      <td style="text-align: right;">Externer Dämmerungsschalter Eingang {{msg?.lsm.si[tab] + 1}}:
                       </td>
                       <td colspan="2">
                         <ng-select class="button" [items]="mode_state" [addTag]="true" bindValue="label" [(ngModel)]="current_mode_state[tab]"
@@ -116,7 +100,6 @@
                         </ng-select>
                       </td>
                     </tr>
-
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 1">
                     <tr>
@@ -192,11 +175,9 @@
                           Nachlaufzeit:</label>
                       </td>
                       <td>
-
                         <input style="width: 80px;" pInputText type="number" id="ot" min="0" max="60000" value="" style="text-align: right;"
                           class="small-text-input" [ngModel]="msg?.sens.ot[tab] / 60000" (ngModelChange)="this.msg?.sens.ot[tab] = ($event * 60000)"
                           step="0.1" />
-
                         Min.
                       </td>
                     </tr>
@@ -213,7 +194,7 @@
                     </tr>
                     <tr>
                       <td></td>
-                      <td colspan="1" style="text-align: left;">Bewegungsmelder LBM Kanal {{sensorSelection}}:
+                      <td colspan="1" style="text-align: left;">Bewegungsmelder LBM Kanal {{msg?.lsm.si[tab] + 1}}:
                       </td>
                       <td>
                         <input style="float: left;" type="checkbox" [id]="'mode + 3'+tab" (click)="change_current_mode(3)"
@@ -221,9 +202,7 @@
                           [for]="'mode + 3'+tab"></label>
                       </td>
                     </tr>
-
                     <tr>
-
                       <td colspan="1" style="text-align: right;">Globaler Trigger:</td>
                       <td colspan="2" style="text-align: left;">
                         <span>
@@ -233,14 +212,11 @@
                           </ng-select>
                         </span>
                       </td>
-
                     </tr>
                   </ng-container>
                 </table>
               </td>
-
             </tr>
-
           </table>
         </li>
         <li *ngFor="let text of tabTexts; let i = index" class="slider-row">

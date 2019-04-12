@@ -85,19 +85,24 @@ export class AppComponent implements OnInit, OnDestroy {
   loaded = false;
   imageSrc;
   j = {};
-  senonsorOptions = [1, 2, 3, 4, 5, 6];
-  sensorSelection = 1;
+  editSi = false;
+  senonsorOptions = [
+    { value: 0, label: '1' },
+    { value: 1, label: '2' },
+    { value: 2, label: '3' },
+    { value: 3, label: '4' },
+    { value: 4, label: '5' },
+    { value: 5, label: '6' }
+  ];
   offSetvalue = 0;
   minValue = 0;
   maxValue = 0;
   mode_value = 0;
   ready = true;
-  customSI = false;
   customOf = false;
   customMinValue = false;
   customMaxValue = false;
   customDil = false;
-  tmpSi = [1, 2, 3, 4, 5, 6];
   current_mode: boolean[];
   strData = '';
   copied = false;
@@ -266,16 +271,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   changeTab(i: number) {
-
     this.tab = i;
     this.offSetvalue = this.msg.lsm.of[this.tab] / 2.54;
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
     this.minValue = this.msg.lsm.min[this.tab] / 2.54;
 
-    this.sensorSelection = this.msg.lsm.si[this.tab] + 1;
     this.current_mode = this.create_mode();
     this.customPot = this.get_costum_pot();
     this.update_external_and_global_trigger();
+
+    this.editSi = this.msg.lsm.si[this.tab] !== this.tab;
+    console.log(this.editSi);
   }
   refreshMinMax() {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
@@ -284,11 +290,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.lsm6Subscription.unsubscribe();
     this.stateSubscription.unsubscribe();
-  }
-  setSensorChange() {
-
-    this.tmpSi[this.tab] = this.sensorSelection - 1;
-    this.msg.lsm.si[this.tab] = this.sensorSelection - 1;
   }
   changeMin() {
     this.customMinValue = !this.customMinValue;
@@ -300,16 +301,18 @@ export class AppComponent implements OnInit, OnDestroy {
   changeOffset() {
     this.customOf = !this.customOf;
   }
-  changeSI() {
-    this.customSI = !this.customSI;
-    if (this.customSI === false) {
-      this.sensorSelection = this.tab + 1;
+  changeSI(newValue: Boolean) {
+    if (newValue) {
+      this.editSi = true;
+    } else {
+      this.msg.lsm.si[this.tab] = this.tab;
+      this.editSi = false;
     }
   }
-  update() {
-
+  changeSelectSI(value) {
+    this.msg.lsm.si[this.tab] = value.value;
+    this.editSi = this.msg.lsm.si[this.tab] !== this.tab;
   }
-
   connect() {
     this.connection_failed = false;
     this.lsm6Service.connect(this.wsUrl);
@@ -331,17 +334,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.wsConected = true;
         this.recvied_ping = true;
         this.refreshMinMax();
-        if (this.copied) {
-          if (this.tmpSi[this.tab] !== this.msg.lsm.si[this.tab] + 1) {
-            this.sensorSelection = this.msg.lsm.si[this.tab] + 1;
-            this.tmpSi[this.tab] = this.sensorSelection;
-          }
-        } else {
-          this.tmpSi = this.msg.lsm.si;
-          this.addIndex();
-          this.copied = true;
-          this.sensorSelection = this.senonsorOptions[this.msg.lsm.si[this.tab]];
-        }
         this.current_mode = this.create_mode();
         this.update_external_and_global_trigger();
         this.customPot = this.get_costum_pot();
@@ -503,12 +495,6 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log(this.msg.sens.mo[this.tab]);
   }
 
-  addIndex() {
-    this.tmpSi = [];
-    this.msg.lsm.si.forEach(value => {
-      this.tmpSi.push(value + 1);
-    });
-  }
   disconnect() {
     this.lsm6Service.closeSocket();
     this.wsConected = false;
@@ -591,7 +577,9 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.msg == null || !this.wsConected) {
       return '';
     }
-    const ots = (this.msg.sens.ts[this.tab] - this.msg.tic) / 1000;
+    if(this.msg.sens.ts[this.tab] === 0)
+      return 'schalten';
+    const ots = (this.msg.sens.ts[this.tab] + this.msg.sens.ot[this.tab] - this.msg.tic) / 1000;
     if (ots > 180) {
       return 'schalte ab in ' + (ots / 60).toFixed(0) + ' min';
     } else if (ots > 0) {

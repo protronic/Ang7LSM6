@@ -26,7 +26,11 @@ export class DimmSliderComponent implements OnInit {
   }
 
   setDimm(newDimm: number): void {
-    this.dimmValue = Math.round(newDimm * 254 / 100);
+    if (newDimm === 1) {
+      this.dimmValue = 1;
+    } else {
+      this.dimmValue = Math.round(newDimm * 254 / 100);
+    }
     this.dimmValueChange.emit(this.dimmValue);
   }
 
