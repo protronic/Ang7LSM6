@@ -281,7 +281,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.update_external_and_global_trigger();
 
     this.editSi = this.msg.lsm.si[this.tab] !== this.tab;
-    console.log(this.editSi);
   }
   refreshMinMax() {
     this.maxValue = this.msg.lsm.max[this.tab] / 2.54;
