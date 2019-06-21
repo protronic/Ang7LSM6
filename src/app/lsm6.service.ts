@@ -3,11 +3,30 @@ import { Subject } from 'rxjs';
 import { Observer } from 'rxjs';
 import { Observable } from 'rxjs';
 
-export interface Lsm6Data {
-  btn: boolean[];
-  sw?: boolean[];
-  tmp?: number;
-  tic?: number;
+export enum CalcType {
+  NoCalc = 'NoCalc',
+  Linear = 'Linear',
+  Arc = 'Arc',
+  Minutes = 'Minutes'
+}
+
+export interface Lsm6Parameter {
+  lsm?: {
+    sp: number[],
+    sl: number[][],
+    si: number[],
+    max: number[],
+    min: number[],
+  };
+  sens?: {
+    lt: number[],
+    ot: number[],
+    mo: number[]
+  };
+  dil?: number;
+}
+
+export interface Lsm6Data extends Lsm6Parameter {
   lsm?: {
     dali: number[],
     sp: number[],
@@ -19,7 +38,6 @@ export interface Lsm6Data {
     max: number[],
     min: number[],
   };
-  dil?: number;
   sens?: {
     ls: number[],
     lt: number[],
@@ -28,11 +46,72 @@ export interface Lsm6Data {
     mo: number[],
     pot: number[]
   };
+  btn?: boolean[];
+  sw?: boolean[];
+  tmp?: number;
+  tic?: number;
+  dil?: number;
+  err?: number;
 }
+
+export const defLsm6Parameter: Lsm6Parameter = {
+  lsm: {
+    min: [96, 96, 96, 96, 96, 96],
+    max: [254, 254, 254, 254, 254, 254],
+    si: [0, 1, 2, 3, 4, 5],
+    sp: [0, 0, 0, 0, 0, 0],
+    sl: [
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255]
+    ]
+  },
+  sens: {
+    lt: [0, 0, 0, 0, 0, 0],
+    ot: [0, 0, 0, 0, 0, 0],
+    mo: [0, 0, 0, 0, 0, 0]
+  },
+  dil: 0
+};
+
+export const defLsm6Data: Lsm6Data = {
+  btn: [false, false, false, false, false, false],
+  sw: [true, true, true, true, true, true],
+  lsm: {
+    min: [96, 96, 96, 96, 96, 96],
+    max: [254, 254, 254, 254, 254, 254],
+    of: [255, 255, 255, 255, 255, 255],
+    si: [0, 1, 2, 3, 4, 5],
+    dali: [0, 0, 0, 0, 0, 0],
+    sp: [0, 0, 0, 0, 0, 0],
+    sl: [
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255, 255]
+    ],
+    caof: [254, 254, 254, 254, 254, 254],
+    oa: [1, 1, 1, 1, 1, 1]
+  },
+  sens: {
+    ls: [-1, -1, -1, -1, -1, -1],
+    lt: [0, 0, 0, 0, 0, 0],
+    ot: [0, 0, 0, 0, 0, 0],
+    ts: [0, 0, 0, 0, 0, 0],
+    mo: [0, 0, 0, 0, 0, 0],
+    pot: [0, 0, 0, 0, 0, 0]
+  },
+  dil: 0,
+  err: 0
+};
 
 @Injectable()
 export class Lsm6Service {
-
 
   observer: Subject<string>;
   public messages: Observable<MessageEvent>;

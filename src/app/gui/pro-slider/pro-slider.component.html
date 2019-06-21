@@ -1,0 +1,42 @@
+<td style="text-align: right;">
+  {{ cbTag }}:
+  <input
+    type="checkbox"
+    [id]="id"
+    [ngModel]="cbValue"
+    (change)="toggleActive($event)"
+  />
+  <label [for]="id"></label>
+</td>
+<td>
+  <label>
+    <fa-icon [icon]="['fas', sliderIcon]"></fa-icon>
+    {{ sliderLabel }}
+  </label>
+</td>
+<ng-container *ngIf="sliderVisable">
+  <td style="text-align: left;">
+    <input
+      type="range"
+      id="'RAN_'+id"
+      [ngModel]="value | dimm:calcType"
+      (ngModelChange)="setDimm($event)"
+      [disabled]="sliderDisabled"
+      [min]="min"
+      [max]="max"
+    />
+  </td>
+</ng-container>
+<td>
+  <input
+    type="number"
+    id="'NUM_'+id"
+    [ngModel]="value | dimm:calcType"
+    (ngModelChange)="setDimm($event)"
+    [disabled]="sliderDisabled"
+    [min]="min"
+    [max]="max"
+    [step]="step"
+  />
+  {{ symbol }}
+</td>

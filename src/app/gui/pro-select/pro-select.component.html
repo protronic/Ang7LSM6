@@ -1,0 +1,30 @@
+<td style="text-align: right;">
+  {{ cbTag }}:
+  <input
+    type="checkbox"
+    [id]="id"
+    [ngModel]="cbValue"
+    (change)="toggleActive($event)"
+
+  />
+  <label [for]="id"></label>
+</td>
+<td>
+  <label
+    ><fa-icon [icon]="['fas', selectIcon]"></fa-icon> {{ selectLabel }}</label
+  >
+</td>
+<td colspan="2">
+  <ng-select
+    class="button"
+    [id]="'NGS_' + id"
+    [items]="selectItems"
+    [addTag]="true"
+    [ngModel]="selection"
+    [disabled]="selectDisabled"
+    [searchable]="false"
+    [clearable]="false"
+    (change)="selectionChanged($event)"
+  >
+  </ng-select>
+</td>

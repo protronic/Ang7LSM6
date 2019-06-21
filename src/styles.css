@@ -198,6 +198,11 @@ input {
   line-height: normal;
 }
 
+input[type=number]:disabled
+{
+  background-color: #f9f9f9;
+}
+
 input[type=number]
 {
   width: 60%;

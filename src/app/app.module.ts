@@ -16,6 +16,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { ProSliderComponent } from './gui/pro-slider/pro-slider.component';
+import { ProSelectComponent } from './gui/pro-select/pro-select.component';
+import { FlagsPipe } from './gui/flags.pipe';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
     DimmPipe,
     DimmSliderComponent,
     JsonCompactPipe,
+    ProSliderComponent,
+    ProSelectComponent,
+    FlagsPipe,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +39,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
     InputTextModule,
     FontAwesomeModule
   ],
-  providers: [Lsm6Service],
+  providers: [Lsm6Service, DimmPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {

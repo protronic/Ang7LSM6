@@ -1,5 +1,5 @@
 import {DimmPipe} from './dimm.pipe';
-import {Lsm6Data} from '../../lsm6.service';
+import {Lsm6Data, CalcType} from '../../lsm6.service';
 import {Component, OnInit, Input, SimpleChanges, Output, EventEmitter} from '@angular/core';
 
 @Component({
@@ -15,22 +15,16 @@ export class DimmSliderComponent implements OnInit {
   @Input() disabled = false;
   @Output() dimmValueChange = new EventEmitter<number>();
   rangeValue: number;
+  public clacType = CalcType;
 
-  constructor() {}
+  constructor(private calcPipe: DimmPipe) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  completeValueChange(field: string, value: boolean, disable: boolean) {
-
-  }
+  completeValueChange(field: string, value: boolean, disable: boolean) {}
 
   setDimm(newDimm: number): void {
-    if (newDimm === 1) {
-      this.dimmValue = 1;
-    } else {
-      this.dimmValue = Math.round(newDimm * 254 / 100);
-    }
+    this.dimmValue = this.calcPipe.transformBack(newDimm);
     this.dimmValueChange.emit(this.dimmValue);
   }
 
