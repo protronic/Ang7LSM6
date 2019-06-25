@@ -260,6 +260,22 @@ export class AppComponent implements OnInit, OnDestroy {
     return 'schalten';
   }
 
+  updateBit(number, bitPosition, bitValue) {
+    console.log(number + '|' + bitPosition + '|' + bitValue);
+    const bitValueNormalized = bitValue ? 1 : 0;
+// tslint:disable-next-line: no-bitwise
+    const clearMask = ~(1 << bitPosition);
+// tslint:disable-next-line: no-bitwise
+    return (number & clearMask) | (bitValueNormalized << bitPosition);
+  }
+
+  getBit(number, bitPosition) {
+    console.log(number + '|' + bitPosition);
+
+// tslint:disable-next-line: no-bitwise
+    return (number & (1 << bitPosition)) === 0 ? 0 : 1;
+  }
+
   //  refreshSelect(value: any): void {
   ////    this.wsUrl = value;
   //  }

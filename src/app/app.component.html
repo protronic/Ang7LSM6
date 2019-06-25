@@ -162,6 +162,7 @@
                       [defaultVal]="0"
                       [calcType]="clacType.NoCalc"
                       [(value)]="(msg?.sens.lt)[tab]"
+                      (cbChange)="(msg?.sens.mo)[tab] = this.updateBit((msg?.sens.mo)[tab], 0, $event)"
                       [min]="0"
                       [max]="20000"
                     ></tr>
@@ -170,10 +171,9 @@
                       [id]="'MO23'+tab"
                       [cbTag]="'Externer Dämmerungsschalter'"
                       [selectLabel]="'Eingang ' + ((msg?.lsm.si)[tab] + 1)"
-                      [selectItems]="['Aus', 'Schließer', 'Öffner']"
-                      [defaultSelection]="'Aus'"
                       [(flags)]="(msg?.sens.mo)[tab]"
-                      [flagMask]="12"
+                      [flagMask]="[0, 2, 6]"
+                      [selectItems]="['Aus', 'Schließer', 'Öffner']"
                     ></tr>
                   </ng-container>
                   <ng-container *ngIf="current_config_tab === 1">
@@ -194,6 +194,8 @@
                       [sliderIcon]="'spinner'"
                       [sliderLabel]="'Potentiometer'"
                       [value]="(msg?.sens.pot)[this.tab]"
+                      [cbValue]="this.getBit((msg?.sens.mo)[tab], 5)"
+                      (cbChange)="(msg?.sens.mo)[tab] = this.updateBit((msg?.sens.mo)[tab], 5, $event)"
                     ></tr>
                     <tr
                       app-pro-slider
@@ -234,6 +236,8 @@
                       app-pro-select
                       [id]="'MO4'+tab"
                       [cbTag]="'LSM6 Eingang ' + (tab + 1)"
+                      [(flags)]="(msg?.sens.mo)[this.tab]"
+                      [flagMask]="[0, 8]"
                       [selectItems]="[
                         'Treppenlichtfunktion',
                         'Tasten, Nachdimmen'
@@ -244,18 +248,22 @@
                       [id]="'MO5'+tab"
                       [cbTag]="'Bewegungsmelder'"
                       [selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
+                      [(flags)]="(msg?.sens.mo)[this.tab]"
+                      [flagMask]="[0, 16]"
                       [selectItems]="['aktiv', 'inaktiv']"
                     ></tr>
                     <tr
                       app-pro-select
                       [id]="'MO78'+tab"
                       [cbTag]="'Globaler Trigger'"
+                      [(flags)]="(msg?.sens.mo)[this.tab]"
+                      [flagMask]="[0, 64, 128, 192]"
                       [selectItems]="[
                         'Aus',
                         'Globaler Sender',
-                        'Globaler Empfänger'
+                        'Globaler Empfänger',
+                        'Globaler Sender-Empfänger'
                       ]"
-                      [defaultSelection]="'Aus'"
                     ></tr>
                   </ng-container>
                 </table>

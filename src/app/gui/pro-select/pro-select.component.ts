@@ -1,12 +1,12 @@
-import {Component, OnInit, Input, SimpleChanges, Output, EventEmitter, OnChanges} from '@angular/core';
+import { Component, Input, SimpleChanges, Output, EventEmitter, OnChanges } from '@angular/core';
 
 @Component({
-// tslint:disable-next-line: component-selector
+  // tslint:disable-next-line: component-selector
   selector: '[app-pro-select]',
   templateUrl: './pro-select.component.html',
   styleUrls: ['./pro-select.component.css']
 })
-export class ProSelectComponent implements OnInit, OnChanges {
+export class ProSelectComponent implements OnChanges {
 
   @Input() cbTag: String;
   @Input() selectIcon: String;
@@ -26,24 +26,38 @@ export class ProSelectComponent implements OnInit, OnChanges {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges() {
+    if (this.flags != null && this.flagMask != null) {
+      this.selection = this.selectItems[0];
+      for (let index = this.selectItems.length - 1; index > 0; index--) {
+        // tslint:disable-next-line: no-bitwise
+        if ((this.flags & this.flagMask[index]) === this.flagMask[index]) {
+          this.selection = this.selectItems[index];
+          break;
+        }
+      }
+    }
     this.cbValue = this.selection !== this.defaultSelection;
     this.selectDisabled = !this.cbValue;
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.cbValue = this.selection !== this.defaultSelection;
-    this.selectDisabled = !this.cbValue;
+    console.log('Selection: ' + this.selection + ' Flag: ' + this.flags);
   }
 
   selectionChanged(event): void {
     this.selection = event;
     this.cbValue = this.selection !== this.defaultSelection;
     this.selectDisabled = !this.cbValue;
-    let index = this.selectItems.indexOf(this.selection);
-    this.flags = index;
-    console.log(this.flags & this.flagMask);
-    this.flagsChange.emit(this.flags);
+    const selectionIndex = this.selectItems.indexOf(this.selection);
+
+    for (let index = this.selectItems.length - 1; index > 0; index--) {
+      // tslint:disable-next-line: no-bitwise
+      this.flags  = this.flags & ~this.flagMask[index];
+    }
+    if (this.flags != null && this.flagMask != null) {
+      // tslint:disable-next-line: no-bitwise
+      this.flags = this.flags | this.flagMask[selectionIndex];
+    }
+    console.log('Flag: ' + this.flags);
+    this.flagsChange.emit(this.flags)
     this.selectionChange.emit(this.selection);
   }
 

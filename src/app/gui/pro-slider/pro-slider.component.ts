@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { DimmPipe } from '../dimm-slider/dimm.pipe';
 import { CalcType } from '../../lsm6.service';
 @Component({
@@ -7,7 +7,7 @@ import { CalcType } from '../../lsm6.service';
   templateUrl: './pro-slider.component.html',
   styleUrls: ['./pro-slider.component.css']
 })
-export class ProSliderComponent implements OnInit, OnChanges {
+export class ProSliderComponent implements OnChanges {
 
   @Input() cbTag: String;
   @Input() sliderIcon: String;
@@ -28,21 +28,21 @@ export class ProSliderComponent implements OnInit, OnChanges {
 
   constructor(private calcPipe: DimmPipe) { }
 
-  ngOnInit() {}
-
   ngOnChanges(changes: SimpleChanges) {
-    if (this.defaultVal !== null) {
+    if (this.defaultVal !== undefined ) {
       this.sliderDisabled = this.value === this.defaultVal;
       this.cbValue = !this.sliderDisabled;
+      this.cbChange.emit(this.cbValue);
     }
   }
 
   setDimm(newDimm: number): void {
     this.value = this.calcPipe.transformBack(newDimm, this.calcType, this.min, this.max);
-    if (this.defaultVal !== null) {
+    if (this.defaultVal !== undefined) {
       if (this.value === this.defaultVal) {
         this.cbValue = false;
         this.sliderDisabled = true;
+        this.cbChange.emit(this.cbValue);
       }
     }
     this.valueChange.emit(this.value);
@@ -51,7 +51,7 @@ export class ProSliderComponent implements OnInit, OnChanges {
   toggleActive(event): void {
     this.cbValue = event.target.checked;
     this.sliderDisabled = !this.cbValue;
-    if (this.defaultVal !== null) {
+    if (this.defaultVal !== undefined) {
       if (!this.cbValue) {
         this.value = this.defaultVal;
       }
