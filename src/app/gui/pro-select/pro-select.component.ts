@@ -27,7 +27,7 @@ export class ProSelectComponent implements OnChanges {
   constructor() { }
 
   ngOnChanges() {
-    if (this.flags != null && this.flagMask != null) {
+    if (this.flags !== undefined && this.flagMask !== undefined) {
       this.selection = this.selectItems[0];
       for (let index = this.selectItems.length - 1; index > 0; index--) {
         // tslint:disable-next-line: no-bitwise
@@ -52,7 +52,7 @@ export class ProSelectComponent implements OnChanges {
       // tslint:disable-next-line: no-bitwise
       this.flags  = this.flags & ~this.flagMask[index];
     }
-    if (this.flags != null && this.flagMask != null) {
+    if (this.flags !== undefined && this.flagMask !== undefined) {
       // tslint:disable-next-line: no-bitwise
       this.flags = this.flags | this.flagMask[selectionIndex];
     }
@@ -64,7 +64,7 @@ export class ProSelectComponent implements OnChanges {
   toggleActive(event): void {
     this.cbValue = event.target.checked;
     this.selectDisabled = !this.cbValue;
-    if (this.defaultSelection != null) {
+    if (this.defaultSelection !== undefined) {
       if (!this.cbValue) {
         this.selection = this.defaultSelection;
       }

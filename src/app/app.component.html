@@ -119,6 +119,7 @@
                       app-pro-select
                       [id]="'SI'+tab"
                       [cbTag]="'Sensorkanalwahl'"
+                      [selectIcon]="'project-diagram'"
                       [selectItems]="[1, 2, 3, 4, 5, 6]"
                       [selection]="(msg?.lsm.si)[tab] + 1"
                       [defaultSelection]="tab + 1"
@@ -170,6 +171,7 @@
                       app-pro-select
                       [id]="'MO23'+tab"
                       [cbTag]="'Externer Dämmerungsschalter'"
+                      [selectIcon]="'unlock'"
                       [selectLabel]="'Eingang ' + ((msg?.lsm.si)[tab] + 1)"
                       [(flags)]="(msg?.sens.mo)[tab]"
                       [flagMask]="[0, 2, 6]"
@@ -181,7 +183,7 @@
                       app-pro-slider
                       [id]="'CAOF'+tab"
                       [cbTag]="'Offset'"
-                      [sliderIcon]="'arrow-up'"
+                      [sliderIcon]="'sort-amount-up'"
                       [sliderLabel]="'Verschiebung'"
                       [value]="(msg?.lsm.caof)[tab]"
                       [symbol]="(msg?.lsm.sp)[tab] > 0 ? 'Lux' : '%'"
@@ -235,6 +237,7 @@
                     <tr
                       app-pro-select
                       [id]="'MO4'+tab"
+                      [selectIcon]="'network-wired'"
                       [cbTag]="'LSM6 Eingang ' + (tab + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
                       [flagMask]="[0, 8]"
@@ -247,6 +250,7 @@
                       app-pro-select
                       [id]="'MO5'+tab"
                       [cbTag]="'Bewegungsmelder'"
+                      [selectIcon]="'angle-double-right'"
                       [selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
                       [flagMask]="[0, 16]"
@@ -256,6 +260,7 @@
                       app-pro-select
                       [id]="'MO78'+tab"
                       [cbTag]="'Globaler Trigger'"
+                      [selectIcon]="'globe'"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
                       [flagMask]="[0, 64, 128, 192]"
                       [selectItems]="[

@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { saveAs } from 'file-saver';
 import { OnDestroy } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Subscription } from 'rxjs';
 import PouchDB from 'pouchdb';
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
   console = console;
   public clacType = CalcType;
 
-  constructor(public lsm6Service: Lsm6Service, private http: Http) {
+  constructor(public lsm6Service: Lsm6Service, private http: HttpClient) {
     this.tabTexts = TAB_TEXTS;
     this.ipItems = IP_ITEMS;
   }
@@ -167,9 +167,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   get_data() {
     this.http.get('assets/config.json')
-      .subscribe(data => {
+      .subscribe((data: Lsm6Data) => {
         if (!this.msg) {
-          this.msg = data.json();
+          this.msg = data;
           this.loaded = true;
         }
       }, error => {

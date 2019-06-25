@@ -19,6 +19,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { ProSliderComponent } from './gui/pro-slider/pro-slider.component';
 import { ProSelectComponent } from './gui/pro-select/pro-select.component';
 import { FlagsPipe } from './gui/flags.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { FlagsPipe } from './gui/flags.pipe';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     NgSelectModule,
     BrowserAnimationsModule,
     InputTextModule,

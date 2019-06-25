@@ -37,6 +37,7 @@ export interface Lsm6Data extends Lsm6Parameter {
     caof: number[],
     max: number[],
     min: number[],
+    im: number[],
   };
   sens?: {
     ls: number[],
