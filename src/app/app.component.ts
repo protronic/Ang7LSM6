@@ -11,6 +11,7 @@ import { Http } from '@angular/http';
 import { Subscription } from 'rxjs';
 import PouchDB from 'pouchdb';
 
+
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 const IP_ITEMS = [
   { label: 'lsm6' },
@@ -261,16 +262,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   updateBit(number, bitPosition, bitValue) {
-    console.log(number + '|' + bitPosition + '|' + bitValue);
+    // console.log(number + '|' + bitPosition + '|' + bitValue);
     const bitValueNormalized = bitValue ? 1 : 0;
-// tslint:disable-next-line: no-bitwise
+    // tslint:disable-next-line: no-bitwise
     const clearMask = ~(1 << bitPosition);
-// tslint:disable-next-line: no-bitwise
+    // tslint:disable-next-line: no-bitwise
     return (number & clearMask) | (bitValueNormalized << bitPosition);
   }
 
   getBit(number, bitPosition) {
-    console.log(number + '|' + bitPosition);
+    // console.log(number + '|' + bitPosition);
 
 // tslint:disable-next-line: no-bitwise
     return (number & (1 << bitPosition)) === 0 ? 0 : 1;

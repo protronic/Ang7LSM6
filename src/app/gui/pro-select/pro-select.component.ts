@@ -57,7 +57,7 @@ export class ProSelectComponent implements OnChanges {
       this.flags = this.flags | this.flagMask[selectionIndex];
     }
     console.log('Flag: ' + this.flags);
-    this.flagsChange.emit(this.flags)
+    this.flagsChange.emit(this.flags);
     this.selectionChange.emit(this.selection);
   }
 
