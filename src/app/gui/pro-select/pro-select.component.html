@@ -1,13 +1,14 @@
 <td style="text-align: right;">
   {{ cbTag }}:
-  <input
-    type="checkbox"
-    [id]="id"
-    [ngModel]="cbValue"
-    (change)="toggleActive($event)"
-
-  />
-  <label [for]="id"></label>
+  <ng-container *ngIf="defaultSelection !== undefined">
+    <input
+      type="checkbox"
+      [id]="id"
+      [ngModel]="cbValue"
+      (change)="toggleActive($event)"
+    />
+    <label [for]="id"></label>
+  </ng-container>
 </td>
 <td>
   <label

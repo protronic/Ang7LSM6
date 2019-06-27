@@ -183,16 +183,20 @@
                       app-pro-slider
                       [id]="'CAOF'+tab"
                       [cbTag]="'Offset'"
+                      [calcType]="clacType.Linear"
                       [sliderIcon]="'sort-amount-up'"
                       [sliderLabel]="'Verschiebung'"
                       [value]="(msg?.lsm.caof)[tab]"
                       [symbol]="(msg?.lsm.sp)[tab] > 0 ? 'Lux' : '%'"
+                      [cbValue]="!this.getBit((msg?.dil), 5)"
+                      [cbDisabled]="true"
                     ></tr>
                     <tr
                       app-pro-slider
                       [sliderDisabled]="true"
                       [id]="'MO6'+tab"
                       [cbTag]="'LBM Kanal ' + (tab + 1)"
+                      [calcType]="clacType.Linear"
                       [sliderIcon]="'spinner'"
                       [sliderLabel]="'Potentiometer'"
                       [value]="(msg?.sens.pot)[this.tab]"
@@ -240,10 +244,12 @@
                       [selectIcon]="'network-wired'"
                       [cbTag]="'LSM6 Eingang ' + (tab + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 8]"
+                      [flagMask]="[0, 8, 264, 520]"
                       [selectItems]="[
                         'Treppenlichtfunktion',
-                        'Tasten, Nachdimmen'
+                        'Tasten, Nachdimmen',
+                        'Hoch dimmen',
+                        'Runter dimmen'
                       ]"
                     ></tr>
                     <tr

@@ -17,6 +17,7 @@ export class ProSliderComponent implements OnChanges {
   @Input() max: number;
   @Input() step: number;
   @Input() cbValue: Boolean;
+  @Input() cbDisabled: Boolean = false;
   @Input() defaultVal: number;
   @Input() id: String;
   @Input() sliderDisabled: Boolean = false;

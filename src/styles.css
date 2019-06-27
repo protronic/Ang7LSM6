@@ -282,19 +282,29 @@ input[type=checkbox]+label:after {
   transition: .25s ease-in-out;
 }
 
-input[type=checkbox]:disabled+label {
-  color: lightgray;
-  background: lightgray;
-}
-
-input[type=checkbox]:checked+label:before {
+input[type=checkbox]:enabled:checked+label:before {
   width: 50px;
   background: rgba(36, 75, 166, 1);
 }
 
-input[type=checkbox]:checked+label:after {
+input[type=checkbox]:enabled:checked+label:after {
   left: 20px;
   box-shadow: inset 0 0 0 1px rgba(36, 75, 166, 1), 0 2px 4px rgba(0, 0, 0, .2);
+}
+
+input[type=checkbox]:disabled:checked+label:before {
+  width: 50px;
+  background: lightgray;
+}
+
+input[type=checkbox]:disabled:checked+label:after {
+  left: 20px;
+  box-shadow: inset 0 0 0 1px lightgray, 0 2px 4px rgba(0, 0, 0, .2);
+}
+
+input[type=checkbox]:disabled+label {
+  color: lightgray;
+  background: lightgray;
 }
 
 input[type=range] {
@@ -1028,8 +1038,6 @@ label.button1 {
 .yes-edit-prog {
   display: table-row;
 }
-
-
 
 ul.button-container {
   text-align: center;

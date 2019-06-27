@@ -42,7 +42,7 @@ export class DimmPipe implements PipeTransform {
           break;
       }
     }
-    //console.log('-> ' + result + ' ' + percent + ' ' + ' ' + type + ' ' + value);
+    // console.log('-> ' + result + ' ' + percent + ' ' + ' ' + type + ' ' + value);
     return result;
   }
 
@@ -75,7 +75,7 @@ export class DimmPipe implements PipeTransform {
     if (isNumber(percent)) {
       result = Math.round(percent);
     }
-    //console.log('<- ' + result + ' ' + percent + ' ' + ' ' + type + ' ' + value);
+    // console.log('<- ' + result + ' ' + percent + ' ' + ' ' + type + ' ' + value);
     return result;
   }
 }

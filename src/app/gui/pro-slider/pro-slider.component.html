@@ -5,6 +5,7 @@
     [id]="id"
     [ngModel]="cbValue"
     (change)="toggleActive($event)"
+    [disabled]="this.cbDisabled"
   />
   <label [for]="id"></label>
 </td>
