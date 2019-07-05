@@ -183,12 +183,13 @@
                       app-pro-slider
                       [id]="'CAOF'+tab"
                       [cbTag]="'Offset'"
-                      [calcType]="clacType.Linear"
+                      [calcType]="(msg?.lsm.sp)[tab] > 0 ? clacType.Linear : clacType.Arc"
                       [sliderIcon]="'sort-amount-up'"
                       [sliderLabel]="'Verschiebung'"
                       [value]="(msg?.lsm.caof)[tab]"
+                      (valueChange)="(msg?.lsm.of)[tab] = $event;j = {'lsm': {'of': msg?.lsm.of}}; sendObjToLSM6()"
                       [symbol]="(msg?.lsm.sp)[tab] > 0 ? 'Lux' : '%'"
-                      [cbValue]="!this.getBit((msg?.dil), 5)"
+                      [cbValue]="!this.getBit((msg?.dil), 4)"
                       [cbDisabled]="true"
                     ></tr>
                     <tr
@@ -244,12 +245,12 @@
                       [selectIcon]="'network-wired'"
                       [cbTag]="'LSM6 Eingang ' + (tab + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 8, 264, 520]"
+                      [flagMask]="[0, 256, 512, 768]"
                       [selectItems]="[
                         'Treppenlichtfunktion',
-                        'Tasten, Nachdimmen',
                         'Hoch dimmen',
-                        'Runter dimmen'
+                        'Runter dimmen',
+                        'Tasten, Nachdimmen'
                       ]"
                     ></tr>
                     <tr

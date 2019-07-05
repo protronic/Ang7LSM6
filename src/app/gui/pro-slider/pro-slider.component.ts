@@ -34,6 +34,8 @@ export class ProSliderComponent implements OnChanges {
       this.sliderDisabled = this.value === this.defaultVal;
       this.cbValue = !this.sliderDisabled;
       this.cbChange.emit(this.cbValue);
+    } else {
+      this.sliderDisabled = !this.cbValue;
     }
   }
 

@@ -39,7 +39,7 @@ export class ProSelectComponent implements OnChanges {
     }
     this.cbValue = this.selection !== this.defaultSelection;
     this.selectDisabled = !this.cbValue;
-    console.log('Selection: ' + this.selection + ' Flag: ' + this.flags);
+    // console.log('Selection: ' + this.selection + ' Flag: ' + this.flags);
   }
 
   selectionChanged(event): void {
@@ -56,7 +56,7 @@ export class ProSelectComponent implements OnChanges {
       // tslint:disable-next-line: no-bitwise
       this.flags = this.flags | this.flagMask[selectionIndex];
     }
-    console.log('Flag: ' + this.flags);
+    // console.log('Flag: ' + this.flags);
     this.flagsChange.emit(this.flags);
     this.selectionChange.emit(this.selection);
   }

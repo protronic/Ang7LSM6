@@ -80,10 +80,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
   private set_timer() {
-    this.time_left = 5;
+    this.time_left = 6;
     const timerfunciton = setInterval(() => {
       if (this.time_left > 0) {
         this.time_left--;
+        if (this.ready) {
+          clearInterval(timerfunciton);
+        }
       } else {
         if ((!this.wsConected && !this.manually_closed) || this.transmitting) {
           this.lsm6Service.closeSocket();
@@ -95,7 +98,6 @@ export class AppComponent implements OnInit, OnDestroy {
           if (this.transmitting) {
             this.transmition_failed = true;
           }
-
         } else {
         }
         clearInterval(timerfunciton);
@@ -144,6 +146,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.connection_failed = false;
         this.connecting = false;
         this.transmitting = false;
+        this.ready = true;
         mergeObjects(this.msg, JSON.parse(message.data));
         this.wsState = 'Verbunden';
         this.showConnectionData = false;
@@ -191,16 +194,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
   sendObjToLSM6() {
     this.transmitting = true;
-    this.set_timer();
     if (this.ready) {
+      this.set_timer();
       this.ready = false;
       const s = JSON.stringify(this.j);
       this.lsm6Service.send(s);
+      console.log('Send:');
+      console.log(s);
       this.j = {};
-      this.ready = true;
     } else {
-      console.log('deadlock');
-      console.log(this.ready);
+      // console.log('deadlock');
+      // console.log(this.ready);
     }
 
   }
@@ -273,7 +277,7 @@ export class AppComponent implements OnInit, OnDestroy {
   getBit(number, bitPosition) {
     // console.log(number + '|' + bitPosition);
 
-// tslint:disable-next-line: no-bitwise
+    // tslint:disable-next-line: no-bitwise
     return (number & (1 << bitPosition)) === 0 ? 0 : 1;
   }
 
