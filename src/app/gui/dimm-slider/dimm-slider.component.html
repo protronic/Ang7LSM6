@@ -1,21 +1,49 @@
 <table class="legende">
-	<tr>
-		<td class="col1"></td>
+  <tr>
+    <td class="col1"></td>
     <td class="col2">
       <fa-icon [icon]="['far', 'circle']" size="xs" pull="left"></fa-icon>
-      <fa-icon [icon]="['far', 'lightbulb']" size="s"></fa-icon> {{channel + 1}}
+      <fa-icon [icon]="['far', 'lightbulb']" size="s"></fa-icon>
+      {{ channel + 1 }}
       <fa-icon [icon]="['fas', 'certificate']" size="xs" pull="right"></fa-icon>
     </td>
-		<td class="col3"><fa-icon [icon]="['fas', 'power-off']" size="xs"></fa-icon></td>
-	</tr>
+    <td class="col3">
+      <fa-icon [icon]="['fas', 'power-off']" size="xs"></fa-icon>
+    </td>
+  </tr>
 </table>
+
 <table class="slider">
-	<tr>
+  <tr>
     <!-- <td class="col1"><span style="">{{dimmValue|dimm}} %</span></td> -->
-    <td class="col1"><input type="number" [ngModel] = "dimmValue|dimm:clacType.Arc:1" (ngModelChange)="setDimm($event)" [disabled]="disabled||dimmValue == 255"/> %</td>
-		<td class="col2"><input type="range" [ngModel] = "dimmValue|dimm" (ngModelChange)="setDimm($event)" [disabled]="disabled||dimmValue == 255"/></td>
-		<!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
-		<td class="col3"><input type="checkbox" [id]="'cb' + channel" [ngModel]="getCBVal()" (change)="toggleActive()" [disabled]="disabled"/> <label
-						[for]="'cb' + channel"></label></td>
-	</tr>
+    <td class="col1">
+      <input
+        type="number"
+        [ngModel]="dimmValue | dimm: clacType.Arc:1"
+        (ngModelChange)="setDimm($event)"
+        [disabled]="disabled || dimmValue == 255"
+        [step]="0.1"
+      />
+      %
+    </td>
+    <td class="col2">
+      <input
+        type="range"
+        [ngModel]="dimmValue | dimm"
+        (ngModelChange)="setDimm($event)"
+        [disabled]="disabled || dimmValue == 255"
+      />
+    </td>
+    <!-- oninput="wsSend(this,'1')" [disabled]="msg?.lsm.sl[this.tab][i] == 255" -->
+    <td class="col3">
+      <input
+        type="checkbox"
+        [id]="'cb' + channel"
+        [ngModel]="getCBVal()"
+        (change)="toggleActive()"
+        [disabled]="disabled"
+      />
+      <label [for]="'cb' + channel"></label>
+    </td>
+  </tr>
 </table>
