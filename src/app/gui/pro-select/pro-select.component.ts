@@ -47,17 +47,16 @@ export class ProSelectComponent implements OnChanges {
     this.cbValue = this.selection !== this.defaultSelection;
     this.selectDisabled = !this.cbValue;
     const selectionIndex = this.selectItems.indexOf(this.selection);
-
-    for (let index = this.selectItems.length - 1; index > 0; index--) {
-      // tslint:disable-next-line: no-bitwise
-      this.flags  = this.flags & ~this.flagMask[index];
-    }
     if (this.flags !== undefined && this.flagMask !== undefined) {
+      for (let index = this.selectItems.length - 1; index > 0; index--) {
+        // tslint:disable-next-line: no-bitwise
+        this.flags = this.flags & ~this.flagMask[index];
+      }
       // tslint:disable-next-line: no-bitwise
       this.flags = this.flags | this.flagMask[selectionIndex];
+      // console.log('Flag: ' + this.flags);
+      this.flagsChange.emit(this.flags);
     }
-    // console.log('Flag: ' + this.flags);
-    this.flagsChange.emit(this.flags);
     this.selectionChange.emit(this.selection);
   }
 

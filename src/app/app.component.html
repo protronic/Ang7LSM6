@@ -207,18 +207,18 @@
                     <tr
                       app-pro-slider
                       [id]="'MIN'+tab"
-                      [cbTag]="'Min'"
+                      [cbTag]="'Minimum Dimm'"
                       [sliderIcon]="'arrow-down'"
-                      [sliderLabel]="'Min'"
+                      [sliderLabel]="'Kanal ' + (tab+1)"
                       [defaultVal]="96"
                       [(value)]="(msg?.lsm.min)[tab]"
                     ></tr>
                     <tr
                       app-pro-slider
                       [id]="'MAX'+tab"
-                      [cbTag]="'Max'"
+                      [cbTag]="'Maximum Dimm'"
                       [sliderIcon]="'arrow-up'"
-                      [sliderLabel]="'Max'"
+                      [sliderLabel]="'Kanal ' + (tab+1)"
                       [defaultVal]="254"
                       [(value)]="(msg?.lsm.max)[tab]"
                     ></tr>
@@ -245,7 +245,7 @@
                       [selectIcon]="'network-wired'"
                       [cbTag]="'LSM6 Eingang ' + (tab + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 256, 512, 768]"
+                      [flagMask]="[0, 256, 512, 896]"
                       [selectItems]="[
                         'Treppenlichtfunktion',
                         'Hoch dimmen',
