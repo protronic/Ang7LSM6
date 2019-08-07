@@ -1,7 +1,11 @@
 <body>
   <header style="text-align: center">
     <div>
-      <h1>Multifunktionstool</h1>
+      <h1>
+        <a href="http://protronic.software/MFT/" target="_blank"
+          >Multifunktionstool</a
+        >
+      </h1>
     </div>
     <div class="logout">
       <label *ngIf="wsConected; else loginLabel" title="Logout"
@@ -23,7 +27,8 @@
       <fa-icon [icon]="['fas', 'history']"></fa-icon>
       {{ msg?.tic / 3600000 | number: "1.1-1" }} h
       <fa-icon [icon]="['fas', 'thermometer-half']"></fa-icon> {{ msg?.tmp }}°C
-      <fa-icon [icon]="['fas', 'wrench']"></fa-icon> Dil {{ msg?.dil | flags:['D','N','G','G','I','6','7','8'] }}
+      <fa-icon [icon]="['fas', 'wrench']"></fa-icon> Dil
+      {{ msg?.dil | flags: ["D", "N", "G", "G", "I", "6", "7", "8"] }}
     </div>
   </header>
   <div class="tab">
@@ -117,7 +122,7 @@
                   <ng-container *ngIf="current_config_tab === 0">
                     <tr
                       app-pro-select
-                      [id]="'SI'+tab"
+                      [id]="'SI' + tab"
                       [cbTag]="'Sensorkanalwahl'"
                       [selectIcon]="'project-diagram'"
                       [selectItems]="[1, 2, 3, 4, 5, 6]"
@@ -137,7 +142,7 @@
                     </tr>
                     <tr
                       app-pro-slider
-                      [id]="'SP'+tab"
+                      [id]="'SP' + tab"
                       [sliderVisable]="false"
                       [cbTag]="'Tageslichtregelung'"
                       [sliderIcon]="'bullseye'"
@@ -151,7 +156,7 @@
                     ></tr>
                     <tr
                       app-pro-slider
-                      [id]="'LT'+tab"
+                      [id]="'LT' + tab"
                       [sliderVisable]="false"
                       [cbTag]="
                         'Dämmerungsschalter LBM Kanal ' +
@@ -163,13 +168,19 @@
                       [defaultVal]="0"
                       [calcType]="clacType.NoCalc"
                       [(value)]="(msg?.sens.lt)[tab]"
-                      (cbChange)="(msg?.sens.mo)[tab] = this.updateBit((msg?.sens.mo)[tab], 0, $event)"
+                      (cbChange)="
+                        (msg?.sens.mo)[tab] = this.updateBit(
+                          (msg?.sens.mo)[tab],
+                          0,
+                          $event
+                        )
+                      "
                       [min]="0"
                       [max]="20000"
                     ></tr>
                     <tr
                       app-pro-select
-                      [id]="'MO23'+tab"
+                      [id]="'MO23' + tab"
                       [cbTag]="'Externer Dämmerungsschalter'"
                       [selectIcon]="'unlock'"
                       [selectLabel]="'Eingang ' + ((msg?.lsm.si)[tab] + 1)"
@@ -181,44 +192,56 @@
                   <ng-container *ngIf="current_config_tab === 1">
                     <tr
                       app-pro-slider
-                      [id]="'CAOF'+tab"
+                      [id]="'CAOF' + tab"
                       [cbTag]="'Offset'"
-                      [calcType]="(msg?.lsm.sp)[tab] > 0 ? clacType.Linear : clacType.Arc"
+                      [calcType]="
+                        (msg?.lsm.sp)[tab] > 0 ? clacType.Linear : clacType.Arc
+                      "
                       [sliderIcon]="'sort-amount-up'"
                       [sliderLabel]="'Verschiebung'"
                       [value]="(msg?.lsm.caof)[tab]"
-                      (valueChange)="(msg?.lsm.of)[tab] = $event;j = {'lsm': {'of': msg?.lsm.of}}; sendObjToLSM6()"
+                      (valueChange)="
+                        (msg?.lsm.of)[tab] = $event;
+                        j = { lsm: { of: msg?.lsm.of } };
+                        sendObjToLSM6()
+                      "
                       [symbol]="(msg?.lsm.sp)[tab] > 0 ? 'Lux' : '%'"
-                      [cbValue]="!this.getBit((msg?.dil), 4)"
+                      [cbValue]="!this.getBit(msg?.dil, 4)"
                       [cbDisabled]="true"
                     ></tr>
                     <tr
                       app-pro-slider
                       [sliderDisabled]="true"
-                      [id]="'MO6'+tab"
+                      [id]="'MO6' + tab"
                       [cbTag]="'LBM Kanal ' + (tab + 1)"
                       [calcType]="clacType.Linear"
                       [sliderIcon]="'spinner'"
                       [sliderLabel]="'Potentiometer'"
                       [value]="(msg?.sens.pot)[this.tab]"
                       [cbValue]="this.getBit((msg?.sens.mo)[tab], 5)"
-                      (cbChange)="(msg?.sens.mo)[tab] = this.updateBit((msg?.sens.mo)[tab], 5, $event)"
+                      (cbChange)="
+                        (msg?.sens.mo)[tab] = this.updateBit(
+                          (msg?.sens.mo)[tab],
+                          5,
+                          $event
+                        )
+                      "
                     ></tr>
                     <tr
                       app-pro-slider
-                      [id]="'MIN'+tab"
+                      [id]="'MIN' + tab"
                       [cbTag]="'Minimum Dimm'"
                       [sliderIcon]="'arrow-down'"
-                      [sliderLabel]="'Kanal ' + (tab+1)"
+                      [sliderLabel]="'Kanal ' + (tab + 1)"
                       [defaultVal]="96"
                       [(value)]="(msg?.lsm.min)[tab]"
                     ></tr>
                     <tr
                       app-pro-slider
-                      [id]="'MAX'+tab"
+                      [id]="'MAX' + tab"
                       [cbTag]="'Maximum Dimm'"
                       [sliderIcon]="'arrow-up'"
-                      [sliderLabel]="'Kanal ' + (tab+1)"
+                      [sliderLabel]="'Kanal ' + (tab + 1)"
                       [defaultVal]="254"
                       [(value)]="(msg?.lsm.max)[tab]"
                     ></tr>
@@ -226,7 +249,7 @@
                   <ng-container *ngIf="current_config_tab === 2">
                     <tr
                       app-pro-slider
-                      [id]="'OT'+tab"
+                      [id]="'OT' + tab"
                       [sliderVisable]="false"
                       [cbTag]="'Treppenlichtfunktion'"
                       [sliderIcon]="'stopwatch'"
@@ -241,7 +264,7 @@
                     ></tr>
                     <tr
                       app-pro-select
-                      [id]="'MO4'+tab"
+                      [id]="'MO4' + tab"
                       [selectIcon]="'network-wired'"
                       [cbTag]="'LSM6 Eingang ' + (tab + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
@@ -255,7 +278,7 @@
                     ></tr>
                     <tr
                       app-pro-select
-                      [id]="'MO5'+tab"
+                      [id]="'MO5' + tab"
                       [cbTag]="'Bewegungsmelder'"
                       [selectIcon]="'angle-double-right'"
                       [selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
@@ -265,7 +288,7 @@
                     ></tr>
                     <tr
                       app-pro-select
-                      [id]="'MO78'+tab"
+                      [id]="'MO78' + tab"
                       [cbTag]="'Globaler Trigger'"
                       [selectIcon]="'globe'"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
@@ -342,11 +365,12 @@
           title="Login"
           (click)="connect()"
         >
-          <!-- <i class="fa fa-sign-in" aria-hidden="true"></i> {{wsState}} -->
           <ng-container *ngIf="connecting; else elseTemplate">
             <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
           </ng-container>
-
+          <ng-template #elseTemplate>
+            <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon>
+          </ng-template>
           {{ wsState }}
         </label>
       </li>
@@ -410,20 +434,22 @@
   <footer>
     <ul class="button-container">
       <li>
-        <a href="http://www.protronic-gmbh.de" target="_blank" class="logolink"
+        <a href="https://protronic-gmbh.de" target="_blank" class="logolink"
           ><img src="./assets/logo_neg.png" class="logo"
         /></a>
       </li>
       <li>
         <a
-          href="http://www.protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf"
+          href="https://protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf"
           target="_blank"
           class="downloadlink"
-          ><i class="fas fa-file-pdf" aria-hidden="true"></i> Anleitung (DE)</a
+          ><fa-icon [icon]="['fas', 'file-pdf']"></fa-icon> Anleitung (DE)</a
         >
       </li>
       <li>
-        <a class="logolink"><i class="fas fa-code-branch"></i> 0.0.7</a>
+        <a class="downloadlink" href="https://protronic.software/MFT.zip"
+          ><fa-icon [icon]="['fas', 'file-download']"></fa-icon> 0.0.7</a
+        >
       </li>
     </ul>
   </footer>

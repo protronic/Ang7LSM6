@@ -1058,8 +1058,12 @@ ul.button-container li:last-child {
   margin-right: 0px;
 }
 
-ul.button-container li a {
-  padding: 15px 0px;
+body>footer .logolink {
+  padding: 13px 0px 25px;
+}
+
+body>footer .downloadlink {
+  padding: 18px 0px 25px;
 }
 
 ul.button-container:before,
