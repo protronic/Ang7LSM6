@@ -265,15 +265,29 @@
                     <tr
                       app-pro-select
                       [id]="'MO4' + tab"
+                      [cbTag]="'Tasten'"
                       [selectIcon]="'network-wired'"
-                      [cbTag]="'LSM6 Eingang ' + (tab + 1)"
+                      [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 256, 512, 776]"
+                      [flagMask]="[0, 8]"
                       [selectItems]="[
-                        'Treppenlichtfunktion',
+                        'Nachlaufzeit aktualisieren',
+                        'Ein- und Ausschalten'
+                      ]"
+                    ></tr>
+                    <tr
+                      app-pro-select
+                      [id]="'MO910' + tab"
+                      [cbTag]="'Nachdimmen'"
+                      [selectIcon]="'arrows-alt-v'"
+                      [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
+                      [(flags)]="(msg?.sens.mo)[this.tab]"
+                      [flagMask]="[0, 256, 512, 768]"
+                      [selectItems]="[
+                        'Aus',
                         'Hoch dimmen',
                         'Runter dimmen',
-                        'Tasten, Nachdimmen'
+                        'Hoch und Runter dimmen'
                       ]"
                     ></tr>
                     <tr
@@ -284,7 +298,10 @@
                       [selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
                       [(flags)]="(msg?.sens.mo)[this.tab]"
                       [flagMask]="[0, 16]"
-                      [selectItems]="['aktiv', 'inaktiv']"
+                      [selectItems]="[
+                        'Nachlaufzeit aktualisieren',
+                        'inaktiv'
+                      ]"
                     ></tr>
                     <tr
                       app-pro-select
@@ -448,7 +465,7 @@
       </li>
       <li>
         <a class="downloadlink" href="https://protronic.software/MFT.zip"
-          ><fa-icon [icon]="['fas', 'file-download']"></fa-icon> 0.0.7</a
+          ><fa-icon [icon]="['fas', 'file-download']"></fa-icon> 0.0.8</a
         >
       </li>
     </ul>
