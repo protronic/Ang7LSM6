@@ -8,6 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "update": "ng update --all",
     "prodDeploy": "npm run buildProd && npm run to-couch",
     "buildProd": "ng build --base-href=./ --prod --build-optimizer",
     "to-couch": "angular_couch_deployment.sh -d dist/Ang7LSM6 -b http://prot-subuntu:5985 -o Ang7LSM6 -a ang_prot-wiki"
@@ -29,10 +30,8 @@
     "@fortawesome/free-regular-svg-icons": "^5.8.1",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@ng-select/ng-select": "^2.17.0",
-    "@types/pouchdb": "^6.3.3",
     "core-js": "^2.5.4",
     "file-saver": "^2.0.0",
-    "pouchdb": "^7.0.0",
     "primeicons": "^1.0.0",
     "primeng": "^7.1.0",
     "queueing-subject": "^0.3.0",
