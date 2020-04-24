@@ -32,6 +32,7 @@
     "@ng-select/ng-select": "^2.17.0",
     "core-js": "^2.5.4",
     "file-saver": "^2.0.0",
+    "ngx-smart-modal": "^7.4.0",
     "primeicons": "^1.0.0",
     "primeng": "^7.1.0",
     "queueing-subject": "^0.3.0",

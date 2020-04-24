@@ -9,6 +9,7 @@ import { OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Subscription } from 'rxjs';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
@@ -30,7 +31,7 @@ interface DimmSlider {
 
 export class AppComponent implements OnInit, OnDestroy {
   lsm6Subscription: Subscription;
-  wsConected = false;
+  wsConected = true;
   msg: Lsm6Data = defLsm6Data;
   tab = 0;
   showDetails = false;
@@ -55,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
   console = console;
   public clacType = CalcType;
 
-  constructor(public lsm6Service: Lsm6Service, private http: HttpClient) {
+  constructor(public lsm6Service: Lsm6Service, private http: HttpClient, public ngxSmartModalService: NgxSmartModalService) {
     this.tabTexts = TAB_TEXTS;
     this.ipItems = IP_ITEMS;
   }
@@ -210,9 +211,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   downloadJsonFile() {
-    const jsonString = JsonCompactPipe.prototype.transform(this.msg);
+    const jsonString = this.getCompactMsgString();
     const file = new Blob([jsonString], { type: 'text/json;charset=utf-8' });
     saveAs(file, 'config.json');
+  }
+
+  private getCompactMsgString() {
+    return JsonCompactPipe.prototype.transform(this.msg);
   }
 
   uploadJsonFile(e) {

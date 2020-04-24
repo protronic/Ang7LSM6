@@ -23,6 +23,13 @@
         ></label>
       </ng-template>
     </div>
+    <div class="message">
+      <fa-icon [icon]="['far', 'comment-alt']"
+      (click)="ngxSmartModalService.setModalData(msg, 'msgModal', true);
+      ngxSmartModalService.getModal('msgModal').toggle();
+      console.log(getCompactMsgString());">
+      </fa-icon>
+    </div>
     <div class="temperature">
       <fa-icon [icon]="['fas', 'history']"></fa-icon>
       {{ msg?.tic / 3600000 | number: "1.1-1" }} h
@@ -31,6 +38,11 @@
       {{ msg?.dil | flags: ["D", "N", "G", "G", "I", "6", "7", "8"] }}
     </div>
   </header>
+  <ngx-smart-modal #msgModal identifier="msgModal">
+  <div *ngIf="msgModal.hasData()">
+    <pre>{{ msgModal.getData() | jsonCompact }}</pre>
+  </div>
+  </ngx-smart-modal>
   <div class="tab">
     <button
       class="tablinks"
@@ -415,6 +427,7 @@
           *ngIf="wsConected; else connectLabel"
           class="button"
           (click)="j = msg; sendObjToLSM6()"
+          (onShown)="msg"
         >
           <ng-container *ngIf="transmitting; else elseTemplate">
             <ng-container *ngIf="connection_failed; else elseTemplate">
