@@ -1,4 +1,14 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~ngx-smart-modal/ngx-smart-modal";
+
+/* Add application styles & imports to this file! */
+
+ pre span {white-space: normal;}
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
 
 html {
   font-family: sans-serif;
@@ -876,6 +886,14 @@ footer {
   top: 20px;
   right: 10px;
   font-size: 20px;
+}
+
+.message {
+  position: absolute;
+  top: 20px;
+  right:50%;
+  font-size: 20px;
+  text-align: center;
 }
 
 ul.slidercontainer li {

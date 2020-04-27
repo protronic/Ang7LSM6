@@ -20,6 +20,8 @@ import { ProSliderComponent } from './gui/pro-slider/pro-slider.component';
 import { ProSelectComponent } from './gui/pro-select/pro-select.component';
 import { FlagsPipe } from './gui/flags.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { PrettyPrintPipe } from './jsonlib/pretty-print.pipe';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { HttpClientModule } from '@angular/common/http';
     ProSliderComponent,
     ProSelectComponent,
     FlagsPipe,
+    PrettyPrintPipe,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import { HttpClientModule } from '@angular/common/http';
     NgSelectModule,
     BrowserAnimationsModule,
     InputTextModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgxSmartModalModule.forRoot()
   ],
   providers: [Lsm6Service, DimmPipe],
   bootstrap: [AppComponent]

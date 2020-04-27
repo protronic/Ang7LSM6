@@ -9,7 +9,7 @@ import { OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Subscription } from 'rxjs';
-import PouchDB from 'pouchdb';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
   console = console;
   public clacType = CalcType;
 
-  constructor(public lsm6Service: Lsm6Service, private http: HttpClient) {
+  constructor(public lsm6Service: Lsm6Service, private http: HttpClient, public ngxSmartModalService: NgxSmartModalService) {
     this.tabTexts = TAB_TEXTS;
     this.ipItems = IP_ITEMS;
   }
@@ -67,14 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // this.get_data_from_pouch();
   }
   private get_data_from_pouch() {
-    const db = new PouchDB('IP-Adresses');
-    const items = db.get('IP_ITEMS').catch().then(doc => {
-      this.ipItems = doc['IP_ITEMS'];
-      console.log(doc['IP_ITEMS']);
-      this.ipItems.forEach(element => {
-        console.log(typeof (element) === 'string');
-      });
-    });
+
   }
   private add_to_pouch() {
 
@@ -218,9 +211,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   downloadJsonFile() {
-    const jsonString = JsonCompactPipe.prototype.transform(this.msg);
+    const jsonString = this.getCompactMsgString();
     const file = new Blob([jsonString], { type: 'text/json;charset=utf-8' });
     saveAs(file, 'config.json');
+  }
+
+  getCompactMsgString() {
+    return JsonCompactPipe.prototype.transform(this.msg);
   }
 
   uploadJsonFile(e) {
