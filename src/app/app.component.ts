@@ -31,7 +31,7 @@ interface DimmSlider {
 
 export class AppComponent implements OnInit, OnDestroy {
   lsm6Subscription: Subscription;
-  wsConected = true;
+  wsConected = false;
   msg: Lsm6Data = defLsm6Data;
   tab = 0;
   showDetails = false;
@@ -216,7 +216,7 @@ export class AppComponent implements OnInit, OnDestroy {
     saveAs(file, 'config.json');
   }
 
-  private getCompactMsgString() {
+  getCompactMsgString() {
     return JsonCompactPipe.prototype.transform(this.msg);
   }
 
