@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { Lsm6Service } from './lsm6.service';
@@ -9,7 +8,6 @@ import { DimmPipe } from './gui/dimm-slider/dimm.pipe';
 import { DimmSliderComponent } from './gui/dimm-slider/dimm-slider.component';
 import { JsonCompactPipe } from './jsonlib/json-compact.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {InputTextModule} from 'primeng/inputtext';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -39,7 +37,6 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
     FormsModule,
     HttpClientModule,
     NgSelectModule,
-    BrowserAnimationsModule,
     InputTextModule,
     FontAwesomeModule,
     NgxSmartModalModule.forRoot()
