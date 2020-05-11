@@ -202,6 +202,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
+  toggleMsgModal(){
+    const modalName = 'msgModal';
+    const modal = this.ngxSmartModalService.getModal(modalName);
+    modal.setData(this.msg, true);
+    modal.toggle(true);
+  }
+
   sendOffset(event) {
     this.msg.lsm.of[this.tab] = Math.round(event * 2.54);
     if (this.wsConected) {
