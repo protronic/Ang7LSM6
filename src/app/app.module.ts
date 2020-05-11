@@ -8,9 +8,6 @@ import { DimmPipe } from './gui/dimm-slider/dimm.pipe';
 import { DimmSliderComponent } from './gui/dimm-slider/dimm-slider.component';
 import { JsonCompactPipe } from './jsonlib/json-compact.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
-import {InputTextModule} from 'primeng/inputtext';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -20,6 +17,7 @@ import { FlagsPipe } from './gui/flags.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { PrettyPrintPipe } from './jsonlib/pretty-print.pipe';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -36,9 +34,8 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    NgSelectModule,
-    InputTextModule,
     FontAwesomeModule,
+    NgSelectModule,
     NgxSmartModalModule.forRoot()
   ],
   providers: [Lsm6Service, DimmPipe],
