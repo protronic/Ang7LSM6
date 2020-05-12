@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges, Output, EventEmitter, OnChanges } from '@angular/core';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -9,7 +10,7 @@ import { Component, Input, SimpleChanges, Output, EventEmitter, OnChanges } from
 export class ProSelectComponent implements OnChanges {
 
   @Input() cbTag: String;
-  @Input() selectIcon: String;
+  @Input() selectIcon: IconDefinition;
   @Input() selectLabel: String;
   @Input() selectItems: any[];
   @Input() selection: any;

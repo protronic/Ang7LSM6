@@ -1,48 +1,45 @@
 <body>
-  <header style="text-align: center">
-    <div>
-      <h1>
-        <a href="http://protronic.software/MFT/" target="_blank"
-          >Multifunktionstool</a
-        >
-      </h1>
-    </div>
-    <div class="logout">
-      <label *ngIf="wsConected; else loginLabel" title="Logout"
-        ><fa-icon
-          [icon]="['fas', 'sign-out-alt']"
+	<header style="text-align: center">
+		<div>
+			<h1>
+				<a href="http://protronic.software/MFT/" target="_blank">Multifunktionstool</a>
+			</h1>
+		</div>
+		<div class="logout">
+			<label *ngIf="wsConected; else loginLabel" title="Logout">
+        <fa-icon
+          [icon]="faSignOutAlt"
           (click)="disconnect()"
-        ></fa-icon
-      ></label>
-      <ng-template #loginLabel>
-        <label title="Login"
+        ></fa-icon>
+      </label>
+			<ng-template #loginLabel>
+				<label title="Login"
           ><fa-icon
-            [icon]="['fas', 'sign-in-alt']"
+            [icon]="faSignInAlt"
             (click)="connect()"
           ></fa-icon
         ></label>
-      </ng-template>
-    </div>
-    <div class="message">
-      <fa-icon [icon]="['far', 'comment-alt']"
-      (click)="toggleMsgModal()">
-      </fa-icon>
-    </div>
-    <div class="temperature">
-      <fa-icon [icon]="['fas', 'history']"></fa-icon>
-      {{ msg?.tic / 3600000 | number: "1.1-1" }} h
-      <fa-icon [icon]="['fas', 'thermometer-half']"></fa-icon> {{ msg?.tmp }}°C
-      <fa-icon [icon]="['fas', 'wrench']"></fa-icon> Dil
-      {{ msg?.dil | flags: ["D", "N", "G", "G", "I", "6", "7", "8"] }}
-    </div>
-  </header>
-  <ngx-smart-modal #msgModal [identifier]="msgModal">
-    <div *ngIf="msgModal.hasData()">
-      <pre>{{ msgModal.getData() | jsonCompact }}</pre>
-    </div>
-  </ngx-smart-modal>
-  <div class="tab">
-    <button
+			</ng-template>
+		</div>
+		<div class="message">
+			<fa-icon [icon]="faComment" (click)="toggleMsgModal()">
+			</fa-icon>
+		</div>
+		<div class="temperature">
+			<fa-icon [icon]="faHistory"></fa-icon>
+			{{ msg?.tic / 3600000 | number: "1.1-1" }} h
+			<fa-icon [icon]="faThermometerHalf"></fa-icon> {{ msg?.tmp }}°C
+			<fa-icon [icon]="faWrench"></fa-icon> Dil
+			{{ msg?.dil | flags: ["D", "N", "G", "G", "I", "6", "7", "8"] }}
+		</div>
+	</header>
+	<ngx-smart-modal #msgModal identifier="msgModal">
+		<div *ngIf="msgModal.hasData()">
+			<pre>{{ msgModal.getData() | jsonCompact }}</pre>
+		</div>
+	</ngx-smart-modal>
+	<div class="tab">
+		<button
       class="tablinks"
       [ngClass]="{ active: tab == -1 }"
       type="button"
@@ -50,9 +47,9 @@
       (click)="tab = -1"
     >
       <br />
-      <fa-icon [icon]="['fas', 'sliders-h']"></fa-icon>
+      <fa-icon [icon]="faSlidersH"></fa-icon>
     </button>
-    <button
+		<button
       *ngFor="let text of tabTexts; let i = index"
       class="tablinks"
       [ngClass]="{ active: tab == i }"
@@ -61,55 +58,33 @@
       (click)="changeTab(i)"
     >
       {{ text }} <br />
-      <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+      <fa-icon [icon]="faTasks"></fa-icon>
     </button>
-  </div>
-  <main id="content">
-    <div *ngIf="tab >= 0; else directSlider">
-      <ul
-        class="slidercontainer"
-        id="lightSceneSliderContainer"
-        style="position: relative;"
-      >
-        <li>
-          <table class="slider">
-            <tr>
-              <td
-                class="col3 edit-prog-icon"
-                [ngStyle]="current_config_tab === 0 && { color: '#fbde18' }"
-              >
-                <fa-icon
-                  [icon]="['fas', 'sun']"
-                  (click)="set_curret_config_tab(0)"
-                ></fa-icon>
-              </td>
-              <td
-                class="col3 edit-prog-icon"
-                [ngStyle]="current_config_tab === 2 && { color: '#fbde18' }"
-              >
-                <fa-icon
-                  [icon]="['fas', 'running']"
-                  (click)="set_curret_config_tab(2)"
-                ></fa-icon>
-              </td>
-              <td
-                class="col3 edit-prog-icon"
-                [ngStyle]="current_config_tab === 1 && { color: '#fbde18' }"
-              >
-                <fa-icon
-                  [icon]="['fas', 'sliders-h']"
-                  (click)="set_curret_config_tab(1)"
-                ></fa-icon>
-              </td>
-              <td class="col2">
-                Lichtszene {{ tab + 1 }}
-                {{ getOverrunTimestemp() }}
-              </td>
-              <td
-                class="col3"
-                [ngStyle]="current_config_tab === 2 && { color: '#fbde18' }"
-              >
-                <input
+	</div>
+	<main id="content">
+		<div *ngIf="tab >= 0; else directSlider">
+			<ul class="slidercontainer" id="lightSceneSliderContainer" style="position: relative;">
+				<li>
+					<table class="slider">
+						<tr>
+							<td class="col3 edit-prog-icon"
+								[ngStyle]="current_config_tab === 0 && { color: '#fbde18' }">
+								<fa-icon [icon]="faSun" (click)="set_curret_config_tab(0)"></fa-icon>
+							</td>
+							<td class="col3 edit-prog-icon"
+								[ngStyle]="current_config_tab === 2 && { color: '#fbde18' }">
+								<fa-icon [icon]="faRunning" (click)="set_curret_config_tab(2)"></fa-icon>
+							</td>
+							<td class="col3 edit-prog-icon"
+								[ngStyle]="current_config_tab === 1 && { color: '#fbde18' }">
+								<fa-icon [icon]="faSlidersH" (click)="set_curret_config_tab(1)"></fa-icon>
+							</td>
+							<td class="col2">
+								Lichtszene {{ tab + 1 }}
+								{{ getOverrunTimestemp() }}
+							</td>
+							<td class="col3" [ngStyle]="current_config_tab === 2 && { color: '#fbde18' }">
+								<input
                   type="checkbox"
                   [id]="'lsm' + tab"
                   [disabled]="!wsConected"
@@ -119,293 +94,177 @@
                   "
                   [(ngModel)]="(msg?.btn)[tab]"
                 /><label [for]="'lsm' + tab"></label>
-              </td>
-            </tr>
-          </table>
-        </li>
-        <li id="block-lightScene1" class="no-block-Scene"></li>
-        <li style="padding: 0px;">
-          <table class="slider">
-            <tr id="edit-prog1" *ngIf="showDetails">
-              <td class="edit-prog" colspan="3">
-                <table class="edit-prog">
-                  <ng-container *ngIf="current_config_tab === 0">
-                    <tr
-                      app-pro-select
-                      [id]="'SI' + tab"
-                      [cbTag]="'Sensorkanalwahl'"
-                      [selectIcon]="'project-diagram'"
-                      [selectItems]="[1, 2, 3, 4, 5, 6]"
-                      [selection]="(msg?.lsm.si)[tab] + 1"
-                      [defaultSelection]="tab + 1"
-                      (selectionChange)="(msg?.lsm.si)[tab] = $event - 1"
-                    ></tr>
-                    <tr>
-                      <td></td>
-                      <td>
-                        <label>
-                          <fa-icon [icon]="['fas', 'sun']"></fa-icon>
+							</td>
+						</tr>
+					</table>
+				</li>
+				<li id="block-lightScene1" class="no-block-Scene"></li>
+				<li style="padding: 0px;">
+					<table class="slider">
+						<tr id="edit-prog1" *ngIf="showDetails">
+							<td class="edit-prog" colspan="3">
+								<table class="edit-prog">
+									<ng-container *ngIf="current_config_tab === 0">
+										<tr app-pro-select [id]="'SI' + tab" [cbTag]="'Sensorkanalwahl'"
+											[selectIcon]="faProjectDiagram" [selectItems]="[1, 2, 3, 4, 5, 6]"
+											[selection]="(msg?.lsm.si)[tab] + 1" [defaultSelection]="tab + 1"
+											(selectionChange)="(msg?.lsm.si)[tab] = $event - 1"></tr>
+										<tr>
+											<td></td>
+											<td>
+												<label>
+                          <fa-icon [icon]="faSun"></fa-icon>
                           Sensorwert:
                         </label>
-                      </td>
-                      <td>{{ (msg?.sens.ls)[(msg?.lsm.si)[tab]] }} Lux</td>
-                    </tr>
-                    <tr
-                      app-pro-slider
-                      [id]="'SP' + tab"
-                      [sliderVisable]="false"
-                      [cbTag]="'Tageslichtregelung'"
-                      [sliderIcon]="'bullseye'"
-                      [sliderLabel]="'Sollwert'"
-                      [symbol]="'Lux'"
-                      [defaultVal]="0"
-                      [calcType]="clacType.NoCalc"
-                      [(value)]="(msg?.lsm.sp)[tab]"
-                      [min]="0"
-                      [max]="20000"
-                    ></tr>
-                    <tr
-                      app-pro-slider
-                      [id]="'LT' + tab"
-                      [sliderVisable]="false"
-                      [cbTag]="
+											</td>
+											<td>{{ (msg?.sens.ls)[(msg?.lsm.si)[tab]] }} Lux</td>
+										</tr>
+										<tr app-pro-slider [id]="'SP' + tab" [sliderVisable]="false"
+											[cbTag]="'Tageslichtregelung'" [sliderIcon]="faBullseye"
+											[sliderLabel]="'Sollwert'" [symbol]="'Lux'" [defaultVal]="0"
+											[calcType]="clacType.NoCalc" [(value)]="(msg?.lsm.sp)[tab]" [min]="0"
+											[max]="20000"></tr>
+										<tr app-pro-slider [id]="'LT' + tab" [sliderVisable]="false" [cbTag]="
                         'Dämmerungsschalter LBM Kanal ' +
                         ((msg?.lsm.si)[tab] + 1)
-                      "
-                      [sliderIcon]="'adjust'"
-                      [sliderLabel]="'Schwellwert'"
-                      [symbol]="'Lux'"
-                      [defaultVal]="0"
-                      [calcType]="clacType.NoCalc"
-                      [(value)]="(msg?.sens.lt)[tab]"
-                      (cbChange)="
+                      " [sliderIcon]="faAdjust" [sliderLabel]="'Schwellwert'" [symbol]="'Lux'" [defaultVal]="0"
+											[calcType]="clacType.NoCalc" [(value)]="(msg?.sens.lt)[tab]" (cbChange)="
                         (msg?.sens.mo)[tab] = this.updateBit(
                           (msg?.sens.mo)[tab],
                           0,
                           $event
                         )
-                      "
-                      [min]="0"
-                      [max]="20000"
-                    ></tr>
-                    <tr
-                      app-pro-select
-                      [id]="'MO23' + tab"
-                      [cbTag]="'Externer Dämmerungsschalter'"
-                      [selectIcon]="'unlock'"
-                      [selectLabel]="'Eingang ' + ((msg?.lsm.si)[tab] + 1)"
-                      [(flags)]="(msg?.sens.mo)[tab]"
-                      [flagMask]="[0, 2, 6]"
-                      [selectItems]="['Aus', 'Schließer', 'Öffner']"
-                    ></tr>
-                  </ng-container>
-                  <ng-container *ngIf="current_config_tab === 1">
-                    <tr
-                      app-pro-slider
-                      [id]="'CAOF' + tab"
-                      [cbTag]="'Offset'"
-                      [calcType]="
-                        (msg?.lsm.sp)[tab] > 0 ? clacType.Linear : clacType.Arc
-                      "
-                      [sliderIcon]="'sort-amount-up'"
-                      [sliderLabel]="'Verschiebung'"
-                      [value]="(msg?.lsm.caof)[tab]"
-                      (valueChange)="
+                      " [min]="0" [max]="20000"></tr>
+										<tr app-pro-select [id]="'MO23' + tab" [cbTag]="'Externer Dämmerungsschalter'"
+											[selectIcon]="faUnlock"
+											[selectLabel]="'Eingang ' + ((msg?.lsm.si)[tab] + 1)"
+											[(flags)]="(msg?.sens.mo)[tab]" [flagMask]="[0, 2, 6]"
+											[selectItems]="['Aus', 'Schließer', 'Öffner']"></tr>
+									</ng-container>
+									<ng-container *ngIf="current_config_tab === 1">
+										<tr app-pro-slider [id]="'CAOF' + tab" [cbTag]="'Offset'"
+											[calcType]="(msg?.lsm.sp)[tab] > 0 ? clacType.Linear : clacType.Arc"
+											[sliderIcon]="faSortAmountUp" [sliderLabel]="'Verschiebung'"
+											[value]="(msg?.lsm.caof)[tab]" (valueChange)="
                         (msg?.lsm.of)[tab] = $event;
                         j = { lsm: { of: msg?.lsm.of } };
                         sendObjToLSM6()
-                      "
-                      [symbol]="(msg?.lsm.sp)[tab] > 0 ? 'Lux' : '%'"
-                      [cbValue]="!this.getBit(msg?.dil, 4)"
-                      [cbDisabled]="true"
-                    ></tr>
-                    <tr
-                      app-pro-slider
-                      [sliderDisabled]="true"
-                      [id]="'MO6' + tab"
-                      [cbTag]="'LBM Kanal ' + (tab + 1)"
-                      [calcType]="clacType.Linear"
-                      [sliderIcon]="'spinner'"
-                      [sliderLabel]="'Potentiometer'"
-                      [value]="(msg?.sens.pot)[this.tab]"
-                      [cbValue]="this.getBit((msg?.sens.mo)[tab], 5)"
-                      (cbChange)="
+                      " [symbol]="(msg?.lsm.sp)[tab] > 0 ? 'Lux' : '%'" [cbValue]="!this.getBit(msg?.dil, 4)"
+											[cbDisabled]="true"></tr>
+										<tr app-pro-slider [sliderDisabled]="true" [id]="'MO6' + tab"
+											[cbTag]="'LBM Kanal ' + (tab + 1)" [calcType]="clacType.Linear"
+											[sliderIcon]="faSpinner" [sliderLabel]="'Potentiometer'"
+											[value]="(msg?.sens.pot)[this.tab]"
+											[cbValue]="this.getBit((msg?.sens.mo)[tab], 5)" (cbChange)="
                         (msg?.sens.mo)[tab] = this.updateBit(
                           (msg?.sens.mo)[tab],
                           5,
                           $event
                         )
-                      "
-                    ></tr>
-                    <tr
-                      app-pro-slider
-                      [id]="'MIN' + tab"
-                      [cbTag]="'Minimum Dimm'"
-                      [sliderIcon]="'arrow-down'"
-                      [sliderLabel]="'Kanal ' + (tab + 1)"
-                      [defaultVal]="96"
-                      [(value)]="(msg?.lsm.min)[tab]"
-                    ></tr>
-                    <tr
-                      app-pro-slider
-                      [id]="'MAX' + tab"
-                      [cbTag]="'Maximum Dimm'"
-                      [sliderIcon]="'arrow-up'"
-                      [sliderLabel]="'Kanal ' + (tab + 1)"
-                      [defaultVal]="254"
-                      [(value)]="(msg?.lsm.max)[tab]"
-                    ></tr>
-                  </ng-container>
-                  <ng-container *ngIf="current_config_tab === 2">
-                    <tr
-                      app-pro-slider
-                      [id]="'OT' + tab"
-                      [sliderVisable]="false"
-                      [cbTag]="'Treppenlichtfunktion'"
-                      [sliderIcon]="'stopwatch'"
-                      [sliderLabel]="'Nachlaufzeit'"
-                      [symbol]="'Min'"
-                      [defaultVal]="0"
-                      [calcType]="clacType.Minutes"
-                      [(value)]="(msg?.sens.ot)[this.tab]"
-                      [min]="0"
-                      [max]="60000"
-                      [step]="0.1"
-                    ></tr>
-                    <tr
-                      app-pro-select
-                      [id]="'MO4' + tab"
-                      [cbTag]="'Tasten'"
-                      [selectIcon]="'network-wired'"
-                      [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
-                      [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 8]"
-                      [selectItems]="[
+                      "></tr>
+										<tr app-pro-slider [id]="'MIN' + tab" [cbTag]="'Minimum Dimm'"
+											[sliderIcon]="faArrowDown" [sliderLabel]="'Kanal ' + (tab + 1)"
+											[defaultVal]="96" [(value)]="(msg?.lsm.min)[tab]"></tr>
+										<tr app-pro-slider [id]="'MAX' + tab" [cbTag]="'Maximum Dimm'"
+											[sliderIcon]="faArrowUp" [sliderLabel]="'Kanal ' + (tab + 1)"
+											[defaultVal]="254" [(value)]="(msg?.lsm.max)[tab]"></tr>
+									</ng-container>
+									<ng-container *ngIf="current_config_tab === 2">
+										<tr app-pro-slider [id]="'OT' + tab" [sliderVisable]="false"
+											[cbTag]="'Treppenlichtfunktion'" [sliderIcon]="faStopwatch"
+											[sliderLabel]="'Nachlaufzeit'" [symbol]="'Min'" [defaultVal]="0"
+											[calcType]="clacType.Minutes" [(value)]="(msg?.sens.ot)[this.tab]" [min]="0"
+											[max]="60000" [step]="0.1"></tr>
+										<tr app-pro-select [id]="'MO4' + tab" [cbTag]="'Tasten'"
+											[selectIcon]="faNetworkWired" [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
+											[(flags)]="(msg?.sens.mo)[this.tab]" [flagMask]="[0, 8]" [selectItems]="[
                         'Nachlaufzeit aktualisieren',
                         'Ein- und Ausschalten'
-                      ]"
-                    ></tr>
-                    <tr
-                      app-pro-select
-                      [id]="'MO910' + tab"
-                      [cbTag]="'Nachdimmen'"
-                      [selectIcon]="'arrows-alt-v'"
-                      [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
-                      [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 256, 512, 768]"
-                      [selectItems]="[
+                      ]"></tr>
+										<tr app-pro-select [id]="'MO910' + tab" [cbTag]="'Nachdimmen'"
+											[selectIcon]="faArrowsAltV" [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
+											[(flags)]="(msg?.sens.mo)[this.tab]" [flagMask]="[0, 256, 512, 768]"
+											[selectItems]="[
                         'Aus',
                         'Hoch dimmen',
                         'Runter dimmen',
                         'Hoch und Runter dimmen'
-                      ]"
-                    ></tr>
-                    <tr
-                      app-pro-select
-                      [id]="'MO5' + tab"
-                      [cbTag]="'Bewegungsmelder'"
-                      [selectIcon]="'angle-double-right'"
-                      [selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
-                      [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 16]"
-                      [selectItems]="[
+                      ]"></tr>
+										<tr app-pro-select [id]="'MO5' + tab" [cbTag]="'Bewegungsmelder'"
+											[selectIcon]="faAngleDoubleRight"
+											[selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
+											[(flags)]="(msg?.sens.mo)[this.tab]" [flagMask]="[0, 16]" [selectItems]="[
                         'Nachlaufzeit aktualisieren',
                         'inaktiv'
-                      ]"
-                    ></tr>
-                    <tr
-                      app-pro-select
-                      [id]="'MO78' + tab"
-                      [cbTag]="'Globaler Trigger'"
-                      [selectIcon]="'globe'"
-                      [(flags)]="(msg?.sens.mo)[this.tab]"
-                      [flagMask]="[0, 64, 128, 192]"
-                      [selectItems]="[
+                      ]"></tr>
+										<tr app-pro-select [id]="'MO78' + tab" [cbTag]="'Globaler Trigger'"
+											[selectIcon]="faGlobe" [(flags)]="(msg?.sens.mo)[this.tab]"
+											[flagMask]="[0, 64, 128, 192]" [selectItems]="[
                         'Aus',
                         'Globaler Sender',
                         'Globaler Empfänger',
                         'Globaler Sender-Empfänger'
-                      ]"
-                    ></tr>
-                  </ng-container>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </li>
-        <li *ngFor="let text of tabTexts; let i = index" class="slider-row">
-          <app-dimm-slider
-            [channel]="i"
-            [(dimmValue)]="(msg?.lsm.sl)[this.tab][i]"
-          ></app-dimm-slider>
-        </li>
-      </ul>
-    </div>
-    <ng-template #directSlider>
-      <ul
-        class="slidercontainer"
-        id="lightSceneSliderContainer"
-        style="position: relative;"
-      >
-        <li>
-          <table class="slider">
-            <tr>
-              <td class="col2">Licht dimmen</td>
-            </tr>
-          </table>
-        </li>
-        <li *ngFor="let text of tabTexts; let i = index" class="slider-row">
-          <app-dimm-slider
-            [channel]="i"
-            [sceneSlider]="false"
-            [disabled]="(msg?.sw)[i]"
-            [(dimmValue)]="(msg?.lsm.dali)[i]"
-            (change)="
+                      ]"></tr>
+									</ng-container>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</li>
+				<li *ngFor="let text of tabTexts; let i = index" class="slider-row">
+					<app-dimm-slider [channel]="i" [(dimmValue)]="(msg?.lsm.sl)[this.tab][i]"></app-dimm-slider>
+				</li>
+			</ul>
+		</div>
+		<ng-template #directSlider>
+			<ul class="slidercontainer" id="lightSceneSliderContainer" style="position: relative;">
+				<li>
+					<table class="slider">
+						<tr>
+							<td class="col2">Licht dimmen</td>
+						</tr>
+					</table>
+				</li>
+				<li *ngFor="let text of tabTexts; let i = index" class="slider-row">
+					<app-dimm-slider [channel]="i" [sceneSlider]="false" [disabled]="(msg?.sw)[i]"
+						[(dimmValue)]="(msg?.lsm.dali)[i]" (change)="
               j['dali_' + (i + 1)] = (msg?.lsm.dali)[i]; sendObjToLSM6()
-            "
-          ></app-dimm-slider>
-        </li>
-      </ul>
-    </ng-template>
-    <ul class="button-container" *ngIf="showConnectionData">
-      <li>
-        <label class="button1"
-          ><fa-icon [icon]="['fas', 'link']"></fa-icon> IP-Adresse:
+            "></app-dimm-slider>
+				</li>
+			</ul>
+		</ng-template>
+		<ul class="button-container" *ngIf="showConnectionData">
+			<li>
+				<label class="button1"
+          ><fa-icon [icon]="faLink"></fa-icon> IP-Adresse:
         </label>
-      </li>
-      <li>
-        <ng-select
-          class="button"
-          [items]="ipItems"
-          [addTag]="true"
-          bindValue="label"
-          [(ngModel)]="wsUrl"
-          (change)="add_to_pouch()"
-          [dropdownPosition]="'top'"
-        >
-        </ng-select>
-      </li>
-      <li>
-        <label
+			</li>
+			<li>
+				<ng-select class="button" [items]="ipItems" [addTag]="true" bindValue="label" [(ngModel)]="wsUrl"
+					(change)="add_to_pouch()" [dropdownPosition]="'top'">
+				</ng-select>
+			</li>
+			<li>
+				<label
           class="button"
           [ngStyle]="connection_failed && { 'background-color': 'red' }"
           title="Login"
           (click)="connect()"
         >
           <ng-container *ngIf="connecting; else elseTemplate">
-            <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+            <fa-icon [icon]="faSpinner" [spin]="true"></fa-icon>
           </ng-container>
           <ng-template #elseTemplate>
-            <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon>
+            <fa-icon [icon]="faSignInAlt"></fa-icon>
           </ng-template>
           {{ wsState }}
         </label>
-      </li>
-    </ul>
-    <ul class="button-container">
-      <li>
-        <label class="button"
-          ><fa-icon [icon]="['fas', 'upload']"></fa-icon> Hochladen
+			</li>
+		</ul>
+		<ul class="button-container">
+			<li>
+				<label class="button"
+          ><fa-icon [icon]="faUpload"></fa-icon> Hochladen
           <input
             type="file"
             name="file"
@@ -414,14 +273,13 @@
             style="display: none"
           />
         </label>
-      </li>
-      <li>
-        <label class="button" (click)="downloadJsonFile()" id="backup"
-          ><fa-icon [icon]="['fas', 'download']"></fa-icon> Herunterladen</label
-        >
-      </li>
-      <li>
-        <label
+			</li>
+			<li>
+				<label class="button" (click)="downloadJsonFile()" id="backup"
+          ><fa-icon [icon]="faDownload"></fa-icon> Herunterladen</label>
+			</li>
+			<li>
+				<label
           *ngIf="wsConected; else connectLabel"
           class="button"
           (click)="j = msg; sendObjToLSM6()"
@@ -429,56 +287,53 @@
         >
           <ng-container *ngIf="transmitting; else elseTemplate">
             <ng-container *ngIf="connection_failed; else elseTemplate">
-              <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+              <fa-icon [icon]="faExclamationTriangle"></fa-icon>
               Übertragung fehlgeschlagen
             </ng-container>
             <ng-template #elseTemplate>
-              <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+              <fa-icon [icon]="faSpinner" [spin]="true"></fa-icon>
               Übertragung
             </ng-template>
           </ng-container>
           <ng-template #elseTemplate>
-            <fa-icon [icon]="['fas', 'save']"></fa-icon> Speichern
+            <fa-icon [icon]="faSave"></fa-icon> Speichern
           </ng-template>
         </label>
 
-        <ng-template #connectLabel>
-          <label
+				<ng-template #connectLabel>
+					<label
             class="button"
             (click)="showConnectionData = !showConnectionData"
           >
             <ng-container *ngIf="showConnectionData; else elseTemplate">
-              <fa-icon [icon]="['fas', 'ban']"></fa-icon> Abbrechen
+              <fa-icon [icon]="faBan"></fa-icon> Abbrechen
             </ng-container>
             <ng-template #elseTemplate>
-              <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon>
+              <fa-icon [icon]="faSignInAlt"></fa-icon>
               Verbindung
             </ng-template>
           </label>
-        </ng-template>
-      </li>
-    </ul>
-  </main>
-  <footer>
-    <ul class="button-container">
-      <li>
-        <a href="https://protronic-gmbh.de" target="_blank" class="logolink"
-          ><img src="./assets/logo_neg.png" class="logo"
+				</ng-template>
+			</li>
+		</ul>
+	</main>
+	<footer>
+		<ul class="button-container">
+			<li>
+				<a href="https://protronic-gmbh.de" target="_blank" class="logolink"><img src="./assets/logo_neg.png" class="logo"
         /></a>
-      </li>
-      <li>
-        <a
-          href="https://protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf"
-          target="_blank"
-          class="downloadlink"
-          ><fa-icon [icon]="['fas', 'file-pdf']"></fa-icon> Anleitung (DE)</a
-        >
-      </li>
-      <li>
-        <a class="downloadlink" href="https://protronic.software/MFT.zip"
-          ><fa-icon [icon]="['fas', 'file-download']"></fa-icon> 0.0.9</a
-        >
-      </li>
-    </ul>
-  </footer>
+			</li>
+			<li>
+				<a href="https://protronic-gmbh.de/media/k2/attachments/Betriebsanleitung-LSM6-DE.pdf" target="_blank"
+					class="downloadlink">
+					<fa-icon [icon]="faFilePdf"></fa-icon> Anleitung (DE)
+				</a>
+			</li>
+			<li>
+				<a class="downloadlink" href="https://protronic.software/MFT.zip">
+					<fa-icon [icon]="faFileDownload"></fa-icon> 0.0.9
+				</a>
+			</li>
+		</ul>
+	</footer>
 </body>

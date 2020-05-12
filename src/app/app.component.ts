@@ -11,6 +11,13 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+import {
+  faHistory, faThermometerHalf, faWrench, faSlidersH, faUpload, faTasks, faSun, faRunning, faSpinner,
+  faDownload, faFilePdf, faFileDownload, faSignInAlt, faSignOutAlt, faBan, faLink, faProjectDiagram,
+  faBullseye, faAdjust, faUnlock, faSortAmountUp, faArrowDown, faArrowUp, faStopwatch, faNetworkWired,
+  faArrowsAltV, faAngleDoubleRight, faGlobe,
+} from '@fortawesome/free-solid-svg-icons';
 
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 const IP_ITEMS = [
@@ -55,6 +62,38 @@ export class AppComponent implements OnInit, OnDestroy {
 
   console = console;
   public clacType = CalcType;
+
+  faComment = faComment;
+
+  faHistory = faHistory;
+  faThermometerHalf = faThermometerHalf;
+  faWrench = faWrench;
+  faSlidersH = faSlidersH;
+  faUpload = faUpload;
+  faTasks = faTasks;
+  faSun = faSun;
+  faRunning = faRunning;
+  faSpinner = faSpinner;
+  faDownload = faDownload;
+  faFilePdf = faFilePdf;
+  faFileDownload = faFileDownload;
+  faSignInAlt = faSignInAlt;
+  faSignOutAlt = faSignOutAlt;
+  faBan = faBan;
+  faLink = faLink;
+  faProjectDiagram = faProjectDiagram;
+  faBullseye = faBullseye;
+  faAdjust = faAdjust;
+  faUnlock = faUnlock;
+  faSortAmountUp = faSortAmountUp;
+  faArrowDown = faArrowDown;
+  faArrowUp = faArrowUp;
+  faStopwatch = faStopwatch;
+  faNetworkWired = faNetworkWired;
+  faArrowsAltV = faArrowsAltV;
+  faAngleDoubleRight = faAngleDoubleRight;
+  faGlobe = faGlobe;
+
 
   constructor(public lsm6Service: Lsm6Service, private http: HttpClient, public ngxSmartModalService: NgxSmartModalService) {
     this.tabTexts = TAB_TEXTS;
@@ -202,7 +241,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  toggleMsgModal(){
+  toggleMsgModal() {
     const modalName = 'msgModal';
     const modal = this.ngxSmartModalService.getModal(modalName);
     modal.setData(this.msg, true);

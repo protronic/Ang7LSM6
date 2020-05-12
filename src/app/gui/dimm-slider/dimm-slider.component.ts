@@ -1,6 +1,8 @@
-import {DimmPipe} from './dimm.pipe';
-import {Lsm6Data, CalcType} from '../../lsm6.service';
-import {Component, OnInit, Input, SimpleChanges, Output, EventEmitter} from '@angular/core';
+import { DimmPipe } from './dimm.pipe';
+import { Lsm6Data, CalcType } from '../../lsm6.service';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { faCertificate, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faLightbulb, faCircle } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-dimm-slider',
@@ -17,11 +19,16 @@ export class DimmSliderComponent implements OnInit {
   rangeValue: number;
   public clacType = CalcType;
 
-  constructor(private calcPipe: DimmPipe) {}
+  faCircle = faCircle;
+  faLightbulb = faLightbulb;
+  faCertificate = faCertificate;
+  faPowerOff = faPowerOff;
 
-  ngOnInit() {}
+  constructor(private calcPipe: DimmPipe) { }
 
-  completeValueChange(field: string, value: boolean, disable: boolean) {}
+  ngOnInit() { }
+
+  completeValueChange(field: string, value: boolean, disable: boolean) { }
 
   setDimm(newDimm: number): void {
     this.dimmValue = this.calcPipe.transformBack(newDimm);

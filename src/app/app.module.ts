@@ -41,9 +41,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   providers: [Lsm6Service, DimmPipe],
   bootstrap: [AppComponent]
 })
+
 export class AppModule {
-  constructor() {
-    // Add an icon to the library for convenient access in other components
-    library.add(fas, far);
-  }
+  constructor() { }
 }

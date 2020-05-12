@@ -1,6 +1,8 @@
 import { Component, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { DimmPipe } from '../dimm-slider/dimm.pipe';
 import { CalcType } from '../../lsm6.service';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+
 @Component({
   // tslint:disable-next-line: component-selector
   selector: '[app-pro-slider]',
@@ -10,7 +12,7 @@ import { CalcType } from '../../lsm6.service';
 export class ProSliderComponent implements OnChanges {
 
   @Input() cbTag: String;
-  @Input() sliderIcon: String;
+  @Input() sliderIcon: IconDefinition;
   @Input() sliderLabel: String;
   @Input() value: number;
   @Input() min: number;
