@@ -93,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
   faArrowsAltV = faArrowsAltV;
   faAngleDoubleRight = faAngleDoubleRight;
   faGlobe = faGlobe;
+  cnt: number = 0;
 
 
   constructor(public lsm6Service: Lsm6Service, private http: HttpClient, public ngxSmartModalService: NgxSmartModalService) {
@@ -242,10 +243,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toggleMsgModal() {
-    const modalName = 'msgModal';
-    const modal = this.ngxSmartModalService.getModal(modalName);
-    modal.setData(this.msg, true);
-    modal.toggle(true);
+    this.ngxSmartModalService.setModalData(this.getCompactMsgString(), 'msgModal', true)
+    this.ngxSmartModalService.toggle('msgModal', true);
   }
 
   sendOffset(event) {

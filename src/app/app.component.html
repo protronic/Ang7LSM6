@@ -33,9 +33,9 @@
 			{{ msg?.dil | flags: ["D", "N", "G", "G", "I", "6", "7", "8"] }}
 		</div>
 	</header>
-	<ngx-smart-modal #msgModal identifier="msgModal">
+	<ngx-smart-modal #msgModal identifier="msgModal" >
 		<div *ngIf="msgModal.hasData()">
-			<pre>{{ msgModal.getData() | jsonCompact }}</pre>
+			<pre>{{ msgModal.getData() }}</pre>
 		</div>
 	</ngx-smart-modal>
 	<div class="tab">
@@ -331,7 +331,7 @@
 			</li>
 			<li>
 				<a class="downloadlink" href="https://protronic.software/MFT.zip">
-					<fa-icon [icon]="faFileDownload"></fa-icon> 0.0.9
+					<fa-icon [icon]="faFileDownload"></fa-icon> 0.1.0
 				</a>
 			</li>
 		</ul>
