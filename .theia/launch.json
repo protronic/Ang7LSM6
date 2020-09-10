@@ -13,7 +13,7 @@
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:4200",
-      "webRoot": "${workspaceFolder}/dist"
+      "webRoot": "${workspaceFolder}/dist/Ang7LSM6"
     }
   ]
 }
