@@ -107,8 +107,8 @@
 									<ng-container *ngIf="current_config_tab === 0">
 										<tr app-pro-select [id]="'SI' + tab" [cbTag]="'Sensorkanalwahl'"
 											[selectIcon]="faProjectDiagram" [selectItems]="[1, 2, 3, 4, 5, 6]"
-											[selection]="(msg?.lsm.si)[tab] + 1" [defaultSelection]="255"
-											(selectionChange)="(msg?.lsm.si)[tab] = $event - 1"></tr>
+											[selection]="(msg?.lsm.si)[tab] != 255 ? (msg?.lsm.si)[tab] + 1 : 'Auto'" [defaultSelection]="'Auto'"
+											(selectionChange)="(msg?.lsm.si)[tab] = $event != 'Auto' ? $event - 1 : 255"></tr>
 										<tr>
 											<td></td>
 											<td>
@@ -240,8 +240,7 @@
         </label>
 			</li>
 			<li>
-				<ng-select class="button" [items]="ipItems" [addTag]="true" bindValue="label" [(ngModel)]="wsUrl"
-					(change)="add_to_pouch()" [dropdownPosition]="'top'">
+				<ng-select class="button" [items]="ipItems" [addTag]="true" bindValue="label" [(ngModel)]="wsUrl" [dropdownPosition]="'top'">
 				</ng-select>
 			</li>
 			<li>

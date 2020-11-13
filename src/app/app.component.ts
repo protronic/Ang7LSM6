@@ -16,7 +16,7 @@ import {
   faHistory, faThermometerHalf, faWrench, faSlidersH, faUpload, faTasks, faSun, faRunning, faSpinner,
   faDownload, faFilePdf, faFileDownload, faSignInAlt, faSignOutAlt, faBan, faLink, faProjectDiagram,
   faBullseye, faAdjust, faUnlock, faSortAmountUp, faArrowDown, faArrowUp, faStopwatch, faNetworkWired,
-  faArrowsAltV, faAngleDoubleRight, faGlobe,
+  faArrowsAltV, faAngleDoubleRight, faGlobe, faSave, faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
@@ -74,6 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
   faSun = faSun;
   faRunning = faRunning;
   faSpinner = faSpinner;
+  faSave = faSave;
   faDownload = faDownload;
   faFilePdf = faFilePdf;
   faFileDownload = faFileDownload;
@@ -93,6 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
   faArrowsAltV = faArrowsAltV;
   faAngleDoubleRight = faAngleDoubleRight;
   faGlobe = faGlobe;
+  faExclamationTriangle = faExclamationTriangle;
   cnt: number = 0;
 
 
