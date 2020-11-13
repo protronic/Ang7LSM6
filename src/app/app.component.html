@@ -107,7 +107,7 @@
 									<ng-container *ngIf="current_config_tab === 0">
 										<tr app-pro-select [id]="'SI' + tab" [cbTag]="'Sensorkanalwahl'"
 											[selectIcon]="faProjectDiagram" [selectItems]="[1, 2, 3, 4, 5, 6]"
-											[selection]="(msg?.lsm.si)[tab] + 1" [defaultSelection]="tab + 1"
+											[selection]="(msg?.lsm.si)[tab] + 1" [defaultSelection]="255"
 											(selectionChange)="(msg?.lsm.si)[tab] = $event - 1"></tr>
 										<tr>
 											<td></td>
@@ -197,13 +197,13 @@
                         'Nachlaufzeit aktualisieren',
                         'inaktiv'
                       ]"></tr>
-										<tr app-pro-select [id]="'MO78' + tab" [cbTag]="'Globaler Trigger'"
+										<tr app-pro-select [id]="'MO78' + tab" [cbTag]="'Vorrangschaltung'"
 											[selectIcon]="faGlobe" [(flags)]="(msg?.sens.mo)[this.tab]"
 											[flagMask]="[0, 64, 128, 192]" [selectItems]="[
-                        'Aus',
-                        'Globaler Sender',
-                        'Globaler Empfänger',
-                        'Globaler Sender-Empfänger'
+                        'ausgenommen',
+                        'untergeordnet',
+                        'übergeordnet',
+                        'beides'
                       ]"></tr>
 									</ng-container>
 								</table>
