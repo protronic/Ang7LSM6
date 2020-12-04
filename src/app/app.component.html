@@ -117,7 +117,7 @@
                           Sensorwert:
                         </label>
 											</td>
-											<td>{{ (msg?.sens.ls)[(msg?.lsm.si)[tab]] }} Lux</td>
+											<td>{{ (msg?.sens.ls)[(msg?.lsm.si)[tab] != 255 ? (msg?.lsm.si)[tab]: tab] }} Lux</td>
 										</tr>
 										<tr app-pro-slider [id]="'SP' + tab" [sliderVisable]="false"
 											[cbTag]="'Tageslichtregelung'" [sliderIcon]="faBullseye"
@@ -126,7 +126,7 @@
 											[max]="20000"></tr>
 										<tr app-pro-slider [id]="'LT' + tab" [sliderVisable]="false" [cbTag]="
                         'Dämmerungsschalter LBM Kanal ' +
-                        ((msg?.lsm.si)[tab] + 1)
+                        (((msg?.lsm.si)[tab] != 255 ? (msg?.lsm.si)[tab]: tab) + 1)
                       " [sliderIcon]="faAdjust" [sliderLabel]="'Schwellwert'" [symbol]="'Lux'" [defaultVal]="0"
 											[calcType]="clacType.NoCalc" [(value)]="(msg?.sens.lt)[tab]" (cbChange)="
                         (msg?.sens.mo)[tab] = this.updateBit(
@@ -137,7 +137,7 @@
                       " [min]="0" [max]="20000"></tr>
 										<tr app-pro-select [id]="'MO23' + tab" [cbTag]="'Externer Dämmerungsschalter'"
 											[selectIcon]="faUnlock"
-											[selectLabel]="'Eingang ' + ((msg?.lsm.si)[tab] + 1)"
+											[selectLabel]="'Eingang ' + (((msg?.lsm.si)[tab] != 255 ? (msg?.lsm.si)[tab]: tab) + 1)"
 											[(flags)]="(msg?.sens.mo)[tab]" [flagMask]="[0, 2, 6]"
 											[selectItems]="['Aus', 'Schließer', 'Öffner']"></tr>
 									</ng-container>
@@ -183,16 +183,17 @@
                       ]"></tr>
 										<tr app-pro-select [id]="'MO910' + tab" [cbTag]="'Nachdimmen'"
 											[selectIcon]="faArrowsAltV" [selectLabel]="'LSM6 Eingang ' + (tab + 1)"
-											[(flags)]="(msg?.sens.mo)[this.tab]" [flagMask]="[0, 256, 512, 768]"
+											[(flags)]="(msg?.sens.mo)[this.tab]" [flagMask]="[0, 256, 512, 768, 1024]"
 											[selectItems]="[
                         'Aus',
                         'Hoch dimmen',
                         'Runter dimmen',
-                        'Hoch und Runter dimmen'
+                        'Hoch und Runter dimmen',
+                        'LSM2 0-10V Dimmer'
                       ]"></tr>
 										<tr app-pro-select [id]="'MO5' + tab" [cbTag]="'Bewegungsmelder'"
 											[selectIcon]="faAngleDoubleRight"
-											[selectLabel]="'LBM Kanal ' + ((msg?.lsm.si)[tab] + 1)"
+											[selectLabel]="'LBM Kanal ' + (((msg?.lsm.si)[tab] != 255 ? (msg?.lsm.si)[tab]: tab) + 1)"
 											[(flags)]="(msg?.sens.mo)[this.tab]" [flagMask]="[0, 16]" [selectItems]="[
                         'Nachlaufzeit aktualisieren',
                         'inaktiv'
@@ -204,6 +205,12 @@
                         'untergeordnet',
                         'übergeordnet',
                         'beides'
+                      ]"></tr>
+                      <tr app-pro-select [id]="'MO12' + tab" [cbTag]="'Rückfallszene'"
+											[selectIcon]="faUndo" [(flags)]="(msg?.sens.mo)[this.tab]"
+											[flagMask]="[0, 2048]" [selectItems]="[
+                        'aus',
+                        'an'
                       ]"></tr>
 									</ng-container>
 								</table>

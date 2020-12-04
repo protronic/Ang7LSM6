@@ -11,12 +11,12 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
-import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { faComment, far } from '@fortawesome/free-regular-svg-icons';
 import {
   faHistory, faThermometerHalf, faWrench, faSlidersH, faUpload, faTasks, faSun, faRunning, faSpinner,
   faDownload, faFilePdf, faFileDownload, faSignInAlt, faSignOutAlt, faBan, faLink, faProjectDiagram,
   faBullseye, faAdjust, faUnlock, faSortAmountUp, faArrowDown, faArrowUp, faStopwatch, faNetworkWired,
-  faArrowsAltV, faAngleDoubleRight, faGlobe, faSave, faExclamationTriangle,
+  faArrowsAltV, faAngleDoubleRight, faGlobe, faSave, faExclamationTriangle, faUndo
 } from '@fortawesome/free-solid-svg-icons';
 
 const TAB_TEXTS: Array<string> = ['I', 'II', 'III', 'IV', 'V', 'VI'];
@@ -94,6 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
   faArrowsAltV = faArrowsAltV;
   faAngleDoubleRight = faAngleDoubleRight;
   faGlobe = faGlobe;
+  faUndo = faUndo;
   faExclamationTriangle = faExclamationTriangle;
   cnt: number = 0;
 
